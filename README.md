@@ -1,3 +1,3 @@
-# g6-Aurora
-Project for G6
-LETS GO G6
+## Project for G6
+
+Let's go GANG
