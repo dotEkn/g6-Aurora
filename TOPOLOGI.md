@@ -7,7 +7,7 @@ Funktion: Representerar det externa Internet och företagets internetleverantör
 Syfte i Topologin:
 - Ger Gävle (HK) tillgång till Internet
 - Extern åtkomst till Webserver
-- Används för Kommunikation mellan Gävle och Falun (WAN/VPN)\
+- Används för Kommunikation mellan Gävle och Falun (WAN/VPN)
 
 (Ligger utanför företagets nät och kontrolleras inte av AURORA SENSORS AB)
 
