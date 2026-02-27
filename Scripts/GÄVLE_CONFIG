@@ -254,28 +254,28 @@ interface Vlan5
 ip default-gateway 10.10.5.1
 
 ! R1 (access VLAN 5)
-interface Gi1/0/18
+interface Gi1/0/15
  description to_R1_G0/0/1
  switchport mode access
  switchport access vlan 5
  spanning-tree portfast
 
 ! R2 (TRUNK: VLAN 5 + VLAN 10)
-interface Gi1/0/15
+interface Gi1/0/16
  description to_R2_G0/0/0
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 5,10
 
 ! R3 (TRUNK: VLAN 5 + VLAN 10)
-interface Gi1/0/16
+interface Gi1/0/17
  description to_R3_G0/0/0
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 5,10
 
 ! FTP i DMZ (access VLAN 10)
-interface Gi1/0/17
+interface Gi1/0/1
  description FTP_DMZ
  switchport mode access
  switchport access vlan 10
@@ -319,14 +319,14 @@ interface Gi1/0/15
  switchport trunk allowed vlan 20,25,30,35,40,99
 
 ! Trunk till SW3
-interface Gi1/0/21
+interface range Gi1/0/21-22
  description trunk_to_SW3
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 20,25,30,35,40,99
 
 ! Trunk till SW4
-interface Gi1/0/24
+interface range Gi1/0/23-24
  description trunk_to_SW4
  switchport mode trunk
  switchport trunk native vlan 999
@@ -378,14 +378,14 @@ interface Gi1/0/15
  switchport trunk allowed vlan 20,25,30,35,40,99
 
 ! Trunk till SW2
-interface Gi1/0/21
+interface range Gi1/0/21-22
  description trunk_to_SW2
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 20,25,30,35,40,99
 
 ! Trunk till SW4
-interface Gi1/0/24
+interface range Gi1/0/23-24
  description trunk_to_SW4
  switchport mode trunk
  switchport trunk native vlan 999
@@ -438,21 +438,21 @@ interface Vlan99
 ip default-gateway 10.10.99.1
 
 ! Trunk till SW2
-interface Gi1/0/21
+interface range Gi1/0/21-22
  description trunk_to_SW2
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 20,25,30,35,40,99
 
 ! Trunk till SW3
-interface Gi1/0/24
+interface range Gi1/0/23-24
  description trunk_to_SW3
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 20,25,30,35,40,99
 
 ! Kontor-PC VLAN 30
-interface Gi1/0/14
+interface range Gi1/0/1-14
  description KONTOR_PC
  switchport mode access
  switchport access vlan 30
