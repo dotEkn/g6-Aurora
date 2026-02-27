@@ -291,7 +291,20 @@ no ip domain-lookup
 vtp mode transparent
 spanning-tree mode rapid-pvst
 
-vlan 20,25,30,35,40,99,999
+vlan 20
+ name Konferens
+vlan 25
+ name Konferens_AP
+vlan 30
+ name Kontor
+vlan 35
+ name Kontor_AP
+vlan 40
+ name Server
+vlan 99
+ name Native
+vlan 999
+ name SVARTHÅL
 
 interface Vlan99
  ip address 10.10.99.12 255.255.255.0
@@ -337,7 +350,20 @@ no ip domain-lookup
 vtp mode transparent
 spanning-tree mode rapid-pvst
 
-vlan 20,25,30,35,40,99,999
+vlan 20
+ name Konferens
+vlan 25
+ name Konferens_AP
+vlan 30
+ name Kontor
+vlan 35
+ name Kontor_AP
+vlan 40
+ name Server
+vlan 99
+ name Native
+vlan 999
+ name SVARTHÅL
 
 interface Vlan99
  ip address 10.10.99.13 255.255.255.0
@@ -391,7 +417,20 @@ no ip domain-lookup
 vtp mode transparent
 spanning-tree mode rapid-pvst
 
-vlan 20,25,30,35,40,99,999
+vlan 20
+ name Konferens
+vlan 25
+ name Konferens_AP
+vlan 30
+ name Kontor
+vlan 35
+ name Kontor_AP
+vlan 40
+ name Server
+vlan 99
+ name Native
+vlan 999
+ name SVARTHÅL
 
 interface Vlan99
  ip address 10.10.99.14 255.255.255.0
