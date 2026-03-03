@@ -1,1 +1,292 @@
+## R1 EDGE
+conf t
+hostname R1
+no ip domain lookup
+ip domain name aurora.local
+
+interface g0/0/0
+ description WAN_TO_ISP
+ ip address 203.0.113.3 255.255.255.255
+ ip nat outside
+ no shut
+
+ip route 0.0.0.0 0.0.0.0 0.0.0.0
+
+interface g0/0/1
+ desc TO_R2
+ ip address 10.10.1.1 255.255.255.252
+ ip nat inside
+ no shut
+
+interface g0/0/2
+ desc TO_R3
+ ip address 10.10.1.5 255.255.255.252
+ ip nat inside
+ no shut
+
+ip access-list standard FE-NAT
+ permit 172.16.110.0 0.0.0.255
+ permit 172.16.120.0 0.0.0.255
+ permit 172.16.130.0 0.0.0.255
+ permit 10.10.115.0 0.0.0.255
+ permit 10.10.125.0 0.0.0.255
+ permit 10.10.135.0 0.0.0.255
+ permit 10.10.140.0 0.0.0.255
+ permit 10.10.150.0 0.0.0.255
+ permit 10.10.155.0 0.0.0.255
+ permit 10.10.199.0 0.0.0.255
+exit
+ip nat inside source list FE-NAT interface G0/0/0 overload
+
+router ospf 10
+ router-id 1.1.1.1
+ passive-interface default
+ no passive-interface g0/0/1
+ no passive-interface g0/0/2
+ network 10.10.1.0 0.0.0.3 area 0
+ network 10.10.1.4 0.0.0.3 area 0
+ default-information originate
+
+## R2 CORE
+
+conf t
+hostname R2
+no ip domain lookup
+ip domain name aurora.local
+
+interface g0/0/0
+ ip address 10.10.1.2 255.255.255.252
+ no shut
+
+interface g0/0/1
+ no ip address
+ no shut
+
+! VLAN 199 MGMT
+interface GigabitEthernet0/0/1.199
+ encapsulation dot1Q 199
+ ip address 10.10.199.2 255.255.255.0
+ standby 199 ip 10.10.199.1
+ standby 199 priority 110
+ standby 199 preempt
+
+! VLAN 110 Personal
+interface GigabitEthernet0/0/1.110
+ encapsulation dot1Q 110
+ ip address 172.16.110.2 255.255.255.0
+ standby 110 ip 172.16.110.1
+ standby 110 priority 110
+ standby 110 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 115 Personal WiFi
+interface GigabitEthernet0/0/1.115
+ encapsulation dot1Q 115
+ ip address 10.10.115.2 255.255.255.0
+ standby 115 ip 10.10.115.1
+ standby 115 priority 110
+ standby 115 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 120 Analys
+interface GigabitEthernet0/0/1.120
+ encapsulation dot1Q 120
+ ip address 172.16.120.2 255.255.255.0
+ standby 120 ip 172.16.120.1
+ standby 120 priority 110
+ standby 120 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 125 Analys WiFi
+interface GigabitEthernet0/0/1.125
+ encapsulation dot1Q 125
+ ip address 10.10.125.2 255.255.255.0
+ standby 125 ip 10.10.125.1
+ standby 125 priority 110
+ standby 125 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 130 TestLab
+interface GigabitEthernet0/0/1.130
+ encapsulation dot1Q 130
+ ip address 172.16.130.2 255.255.255.0
+ standby 130 ip 172.16.130.1
+ standby 130 priority 110
+ standby 130 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 135 Test WiFi
+interface GigabitEthernet0/0/1.135
+ encapsulation dot1Q 135
+ ip address 10.10.135.2 255.255.255.0
+ standby 135 ip 10.10.135.1
+ standby 135 priority 110
+ standby 135 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 140 Server
+interface GigabitEthernet0/0/1.140
+ encapsulation dot1Q 140
+ ip address 10.10.140.2 255.255.255.0
+ standby 140 ip 10.10.140.1
+ standby 140 priority 110
+ standby 140 preempt
+
+! VLAN 150 Sensor AP mgmt
+interface GigabitEthernet0/0/1.150
+ encapsulation dot1Q 150
+ ip address 10.10.150.2 255.255.255.0
+ standby 150 ip 10.10.150.1
+ standby 150 priority 110
+ standby 150 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 155 Sensor data
+interface GigabitEthernet0/0/1.155
+ encapsulation dot1Q 155
+ ip address 10.10.155.2 255.255.255.0
+ standby 155 ip 10.10.155.1
+ standby 155 priority 110
+ standby 155 preempt
+ ip helper-address 10.10.140.41
+
+router ospf 10
+ router-id 2.2.2.2
+ passive-interface default
+ no passive-interface GigabitEthernet0/0/0
+ no passive-interface GigabitEthernet0/0/2
+ network 10.10.1.0 0.0.0.3 area 0
+ network 10.10.1.8 0.0.0.3 area 0
+ network 10.10.199.0 0.0.0.255 area 0
+ network 172.16.110.0 0.0.0.255 area 0
+ network 172.16.120.0 0.0.0.255 area 0
+ network 172.16.130.0 0.0.0.255 area 0
+ network 10.10.115.0 0.0.0.255 area 0
+ network 10.10.125.0 0.0.0.255 area 0
+ network 10.10.135.0 0.0.0.255 area 0
+ network 10.10.140.0 0.0.0.255 area 0
+ network 10.10.150.0 0.0.0.255 area 0
+ network 10.10.155.0 0.0.0.255 area 0
+
+## R3 CORE
+
+conf t
+hostname R3
+no ip domain lookup
+ip domain name aurora.local
+
+interface g0/0/0
+ ip address 10.10.1.6 255.255.255.252
+ no shut
+
+interface g0/0/1
+ no ip address
+ no shut
+
+! VLAN 199 MGMT
+interface GigabitEthernet0/0/1.199
+ encapsulation dot1Q 199
+ ip address 10.10.199.3 255.255.255.0
+ standby 199 ip 10.10.199.1
+ standby 199 priority 100
+ standby 199 preempt
+
+! VLAN 110 Personal
+interface GigabitEthernet0/0/1.110
+ encapsulation dot1Q 110
+ ip address 172.16.110.3 255.255.255.0
+ standby 110 ip 172.16.110.1
+ standby 110 priority 100
+ standby 110 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 115 Personal WiFi
+interface GigabitEthernet0/0/1.115
+ encapsulation dot1Q 115
+ ip address 10.10.115.3 255.255.255.0
+ standby 115 ip 10.10.115.1
+ standby 115 priority 100
+ standby 115 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 120 Analys
+interface GigabitEthernet0/0/1.120
+ encapsulation dot1Q 120
+ ip address 172.16.120.3 255.255.255.0
+ standby 120 ip 172.16.120.1
+ standby 120 priority 100
+ standby 120 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 125 Analys WiFi
+interface GigabitEthernet0/0/1.125
+ encapsulation dot1Q 125
+ ip address 10.10.125.3 255.255.255.0
+ standby 125 ip 10.10.125.1
+ standby 125 priority 100
+ standby 125 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 130 TestLab
+interface GigabitEthernet0/0/1.130
+ encapsulation dot1Q 130
+ ip address 172.16.130.3 255.255.255.0
+ standby 130 ip 172.16.130.1
+ standby 130 priority 100
+ standby 130 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 135 Test WiFi
+interface GigabitEthernet0/0/1.135
+ encapsulation dot1Q 135
+ ip address 10.10.135.3 255.255.255.0
+ standby 135 ip 10.10.135.1
+ standby 135 priority 100
+ standby 135 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 140 Server
+interface GigabitEthernet0/0/1.140
+ encapsulation dot1Q 140
+ ip address 10.10.140.3 255.255.255.0
+ standby 140 ip 10.10.140.1
+ standby 140 priority 100
+ standby 140 preempt
+
+! VLAN 150 Sensor AP mgmt
+interface GigabitEthernet0/0/1.150
+ encapsulation dot1Q 150
+ ip address 10.10.150.3 255.255.255.0
+ standby 150 ip 10.10.150.1
+ standby 150 priority 100
+ standby 150 preempt
+ ip helper-address 10.10.140.41
+
+! VLAN 155 Sensor data
+interface GigabitEthernet0/0/1.155
+ encapsulation dot1Q 155
+ ip address 10.10.155.3 255.255.255.0
+ standby 155 ip 10.10.155.1
+ standby 155 priority 100
+ standby 155 preempt
+ ip helper-address 10.10.140.41
+
+router ospf 10
+ router-id 3.3.3.3
+ passive-interface default
+ no passive-interface GigabitEthernet0/0/0
+ no passive-interface GigabitEthernet0/0/2
+ network 10.10.1.4 0.0.0.3 area 0
+ network 10.10.1.8 0.0.0.3 area 0
+ network 10.10.199.0 0.0.0.255 area 0
+ network 172.16.110.0 0.0.0.255 area 0
+ network 172.16.120.0 0.0.0.255 area 0
+ network 172.16.130.0 0.0.0.255 area 0
+ network 10.10.115.0 0.0.0.255 area 0
+ network 10.10.125.0 0.0.0.255 area 0
+ network 10.10.135.0 0.0.0.255 area 0
+ network 10.10.140.0 0.0.0.255 area 0
+ network 10.10.150.0 0.0.0.255 area 0
+ network 10.10.155.0 0.0.0.255 area 0
+
 
