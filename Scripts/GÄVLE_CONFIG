@@ -7,10 +7,31 @@ hostname R1-HK
 no ip domain lookup
 ip domain name aurora.local
 
+ip access-list extended HK-EDGE-IN
+
+! --- Tillåt svarstrafik (stateful-liknande beteende) ---
+permit tcp any any established
+permit icmp any any echo-reply
+permit icmp any any time-exceeded
+permit icmp any any unreachable
+
+! --- Tillåt HTTP till DMZ (publik IP på R1) ---
+permit tcp any host 203.0.113.2 eq 80
+
+! --- Blockera Internet till interna privata nät ---
+deny ip any 10.10.0.0 0.0.255.255
+deny ip any 172.16.0.0 0.0.255.255
+
+! --- Blockera allt annat ---
+deny ip any any log
+
+exit
+
 ! WAN
 interface GigabitEthernet0/0/0
  description WAN_TO_ISP
  ip address 203.0.113.2 255.255.255.252
+ ip access-group HK-EDGE-IN in
  ip nat outside
  no shut
 
