@@ -24,6 +24,10 @@ interface g0/2
  ip nat inside
  no shut
 
+
+## ===== ACL SECTION =====
+
+! NAT ACL for outbound internet access
 ip access-list standard FE-NAT
  permit 172.16.110.0 0.0.0.255
  permit 172.16.120.0 0.0.0.255
@@ -35,7 +39,17 @@ ip access-list standard FE-NAT
  permit 10.10.150.0 0.0.0.255
  permit 10.10.155.0 0.0.0.255
  permit 10.10.199.0 0.0.0.255
+ deny any
 exit
+
+! NTP ACL (allow only R2 & R3)
+conf t
+ip access-list standard NTP-INTERNAL
+ permit 10.10.1.2       ! R2 CORE
+ permit 10.10.1.6       ! R3 CORE
+ deny any
+exit
+
 ip nat inside source list FE-NAT interface G0/0 overload
 
 router ospf 10
@@ -168,6 +182,15 @@ router ospf 10
  network 10.10.150.0 0.0.0.255 area 0
  network 10.10.155.0 0.0.0.255 area 0
 
+
+## ===== ACL SECTION =====
+
+! NTP ACL (allow mgmt VLAN)
+ip access-list standard NTP-MGMT
+ permit 10.10.199.0 0.0.0.255
+ deny any
+exit
+
 ## R3 CORE
 
 conf t
@@ -289,6 +312,14 @@ router ospf 10
  network 10.10.150.0 0.0.0.255 area 0
  network 10.10.155.0 0.0.0.255 area 0
 
+
+## ===== ACL SECTION =====
+
+! NTP ACL (allow mgmt VLAN)
+ip access-list standard NTP-MGMT
+ permit 10.10.199.0 0.0.0.255
+ deny any
+exit
 
 ## SW1
 
