@@ -4,21 +4,21 @@ hostname R1
 no ip domain lookup
 ip domain name aurora.local
 
-interface g0/0/0
+interface g0/0
  description WAN_TO_ISP
- ip address 203.0.113.3 255.255.255.255
+ ip address 203.0.113.10 255.255.255.255
  ip nat outside
  no shut
 
-ip route 0.0.0.0 0.0.0.0 0.0.0.0
+ip route 0.0.0.0 0.0.0.0 203.0.113.9
 
-interface g0/0/1
+interface g0/1
  desc TO_R2
  ip address 10.10.1.1 255.255.255.252
  ip nat inside
  no shut
 
-interface g0/0/2
+interface g0/2
  desc TO_R3
  ip address 10.10.1.5 255.255.255.252
  ip nat inside
@@ -36,13 +36,13 @@ ip access-list standard FE-NAT
  permit 10.10.155.0 0.0.0.255
  permit 10.10.199.0 0.0.0.255
 exit
-ip nat inside source list FE-NAT interface G0/0/0 overload
+ip nat inside source list FE-NAT interface G0/0 overload
 
 router ospf 10
  router-id 1.1.1.1
  passive-interface default
- no passive-interface g0/0/1
- no passive-interface g0/0/2
+ no passive-interface g0/1
+ no passive-interface g0/2
  network 10.10.1.0 0.0.0.3 area 0
  network 10.10.1.4 0.0.0.3 area 0
  default-information originate
