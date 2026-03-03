@@ -50,6 +50,25 @@ ip access-list standard NTP-INTERNAL
  deny any
 exit
 
+
+## ===== NTP SETTINGS =====
+
+conf t
+clock timezone CET 1
+clock summer-time CEST recurring
+
+! Sync with external servers
+ntp server 0.se.pool.ntp.org prefer
+ntp server 1.se.pool.ntp.org
+
+! Fallback local source if internet is down
+ntp master 4
+
+! Restrict who can query NTP
+ntp access-group serve-only NTP-INTERNAL
+ntp access-group query-only NTP-INTERNAL
+
+
 ip nat inside source list FE-NAT interface G0/0 overload
 
 router ospf 10
@@ -191,6 +210,24 @@ ip access-list standard NTP-MGMT
  deny any
 exit
 
+
+## ===== NTP SETTINGS =====
+conf t
+clock timezone CET 1
+clock summer-time CEST recurring
+
+! Use correct source for outgoing NTP packets
+ntp source GigabitEthernet0/0/0
+
+! Sync from R1 (R1 → R2)
+ntp server 10.10.1.1
+
+! ACL for who may query NTP (mgmt VLAN)
+ntp access-group serve-only NTP-MGMT
+ntp access-group query-only NTP-MGMT
+end
+
+
 ## R3 CORE
 
 conf t
@@ -321,6 +358,18 @@ ip access-list standard NTP-MGMT
  deny any
 exit
 
+
+## ===== NTP SETTINGS =====
+conf t
+clock timezone CET 1
+clock summer-time CEST recurring
+ntp source GigabitEthernet0/0/0
+ntp server 10.10.1.5
+ntp access-group serve-only NTP-MGMT
+ntp access-group query-only NTP-MGMT
+end
+
+
 ## SW1
 
 conf t
@@ -407,6 +456,17 @@ interface Port-channel2
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
+
+
+## ===== NTP SETTINGS =====
+clock timezone CET 1
+clock summer-time CEST recurring
+
+! Use mgmt SVI for NTP packets
+ntp source Vlan199
+
+! Always sync to HSRP VIP on core routers
+ntp server 10.10.199.1
 
 end
 
@@ -504,6 +564,18 @@ interface Port-channel3
  switchport trunk native vlan 999
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
+## ===== NTP SETTINGS =====
+clock timezone CET 1
+clock summer-time CEST recurring
+
+! Use mgmt SVI for NTP packets
+ntp source Vlan199
+
+! Always sync to HSRP VIP on core routers
+ntp server 10.10.199.1
+
+end
+
 ## SW3
 conf t
 hostname SW3
@@ -580,6 +652,17 @@ interface Port-channel4
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
+
+
+## ===== NTP SETTINGS =====
+clock timezone CET 1
+clock summer-time CEST recurring
+
+! Use mgmt SVI for NTP packets
+ntp source Vlan199
+
+! Always sync to HSRP VIP on core routers
+ntp server 10.10.199.1
 
 end
 
@@ -676,4 +759,16 @@ interface Port-channel4
  switchport trunk native vlan 999
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
+
+## ===== NTP SETTINGS =====
+clock timezone CET 1
+clock summer-time CEST recurring
+
+! Use mgmt SVI for NTP packets
+ntp source Vlan199
+
+! Always sync to HSRP VIP on core routers
+ntp server 10.10.199.1
+
 end
+
