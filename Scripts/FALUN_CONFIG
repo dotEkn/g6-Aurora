@@ -90,7 +90,6 @@ exit
 
 
 ## ===== NTP SETTINGS =====
-
 clock timezone CET 1
 clock summer-time CEST recurring
 
@@ -104,7 +103,6 @@ ntp master 4
 ! Restrict who can query NTP
 ntp access-group serve-only NTP-INTERNAL
 ntp access-group query-only NTP-INTERNAL
-
 
 ip nat inside source list FE-NAT interface G0/0 overload
 
