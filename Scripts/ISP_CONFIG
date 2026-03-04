@@ -8,8 +8,14 @@ interface GigabitEthernet0/0
  ip address 203.0.113.9 255.255.255.252
  no shut
 
-! ===== Fake Internet LAN =====
+! ===== Interface mot Falun =====
 interface GigabitEthernet0/1
+ description TO_R1_HK
+ ip address 203.0.113.1 255.255.255.252
+ no shut
+
+! ===== Fake Internet LAN =====
+interface GigabitEthernet0/2
  description INTERNET_LAN
  ip address 8.8.8.1 255.255.255.0
  no shut
@@ -22,7 +28,6 @@ ip route 10.10.0.0 255.255.0.0 203.0.113.10
 ! Trafik mot Gävle
 ip route 10.10.5.0 255.255.255.0 203.0.113.2
 ip route 10.10.0.0 255.255.0.0 203.0.113.2
-
 
 end
 wr
