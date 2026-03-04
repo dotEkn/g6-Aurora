@@ -15,9 +15,14 @@ interface GigabitEthernet0/1
  no shut
 
 ! ===== Routing =====
-! Route tillbaka till Gävle interna nät
-ip route 172.16.0.0 255.255.0.0 203.0.113.2
+! Trafik mot Falun
+ip route 172.16.0.0 255.255.0.0 203.0.113.10
+ip route 10.10.0.0 255.255.0.0 203.0.113.10
+
+! Trafik mot Gävle
+ip route 10.10.5.0 255.255.255.0 203.0.113.2
 ip route 10.10.0.0 255.255.0.0 203.0.113.2
+
 
 end
 wr
