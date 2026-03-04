@@ -88,7 +88,7 @@ interface g0/0/1
  no ip address
  no shut
 
-! VLAN 199 MGMT
+! VLAN 199 Management
 interface GigabitEthernet0/0/1.199
  encapsulation dot1Q 199
  ip address 10.10.199.2 255.255.255.0
@@ -105,7 +105,7 @@ interface GigabitEthernet0/0/1.110
  standby 110 preempt
  ip helper-address 10.10.140.41
 
-! VLAN 115 Personal WiFi
+! VLAN 115 Personal AP
 interface GigabitEthernet0/0/1.115
  encapsulation dot1Q 115
  ip address 10.10.115.2 255.255.255.0
@@ -123,7 +123,7 @@ interface GigabitEthernet0/0/1.120
  standby 120 preempt
  ip helper-address 10.10.140.41
 
-! VLAN 125 Analys WiFi
+! VLAN 125 Analys AP
 interface GigabitEthernet0/0/1.125
  encapsulation dot1Q 125
  ip address 10.10.125.2 255.255.255.0
@@ -132,16 +132,7 @@ interface GigabitEthernet0/0/1.125
  standby 125 preempt
  ip helper-address 10.10.140.41
 
-! VLAN 130 TestLab
-interface GigabitEthernet0/0/1.130
- encapsulation dot1Q 130
- ip address 172.16.130.2 255.255.255.0
- standby 130 ip 172.16.130.1
- standby 130 priority 110
- standby 130 preempt
- ip helper-address 10.10.140.41
-
-! VLAN 135 Test WiFi
+! VLAN 135 Test AP
 interface GigabitEthernet0/0/1.135
  encapsulation dot1Q 135
  ip address 10.10.135.2 255.255.255.0
@@ -235,7 +226,7 @@ interface g0/0/1
  no ip address
  no shut
 
-! VLAN 199 MGMT
+! VLAN 199 Management
 interface GigabitEthernet0/0/1.199
  encapsulation dot1Q 199
  ip address 10.10.199.3 255.255.255.0
@@ -252,7 +243,7 @@ interface GigabitEthernet0/0/1.110
  standby 110 preempt
  ip helper-address 10.10.140.41
 
-! VLAN 115 Personal WiFi
+! VLAN 115 Personal AP
 interface GigabitEthernet0/0/1.115
  encapsulation dot1Q 115
  ip address 10.10.115.3 255.255.255.0
@@ -270,7 +261,7 @@ interface GigabitEthernet0/0/1.120
  standby 120 preempt
  ip helper-address 10.10.140.41
 
-! VLAN 125 Analys WiFi
+! VLAN 125 Analys AP
 interface GigabitEthernet0/0/1.125
  encapsulation dot1Q 125
  ip address 10.10.125.3 255.255.255.0
@@ -279,16 +270,7 @@ interface GigabitEthernet0/0/1.125
  standby 125 preempt
  ip helper-address 10.10.140.41
 
-! VLAN 130 TestLab
-interface GigabitEthernet0/0/1.130
- encapsulation dot1Q 130
- ip address 172.16.130.3 255.255.255.0
- standby 130 ip 172.16.130.1
- standby 130 priority 100
- standby 130 preempt
- ip helper-address 10.10.140.41
-
-! VLAN 135 Test WiFi
+! VLAN 135 Test AP
 interface GigabitEthernet0/0/1.135
  encapsulation dot1Q 135
  ip address 10.10.135.3 255.255.255.0
@@ -371,13 +353,13 @@ spanning-tree mode rapid-pvst
 vlan 110 
  name PERSONAL 
 vlan 115 
- name PERSONAL_WIFI
+ name PERSONAL_AP
 vlan 120
  name ANALYS
 vlan 125
- name ANALYS_WIFI
+ name ANALYS_AP
 vlan 135
- name TEST_WIFI
+ name TEST_AP
 vlan 140
  name SERVER
 vlan 150
@@ -385,7 +367,7 @@ vlan 150
 vlan 155
  name SENSOR_DATA
 vlan 199
- name MGMT
+ name MANAGEMENT
 vlan 999
  name SVARTHÅL
 
@@ -471,13 +453,13 @@ spanning-tree mode rapid-pvst
 vlan 110 
  name PERSONAL 
 vlan 115 
- name PERSONAL_WIFI
+ name PERSONAL_AP
 vlan 120
  name ANALYS
 vlan 125
- name ANALYS_WIFI
+ name ANALYS_AP
 vlan 135
- name TEST_WIFI
+ name TEST_AP
 vlan 140
  name SERVER
 vlan 150
@@ -485,7 +467,7 @@ vlan 150
 vlan 155
  name SENSOR_DATA
 vlan 199
- name MGMT
+ name MANAGEMENT
 vlan 999
  name SVARTHÅL
 
@@ -576,13 +558,13 @@ spanning-tree mode rapid-pvst
 vlan 110 
  name PERSONAL 
 vlan 115 
- name PERSONAL_WIFI
+ name PERSONAL_AP
 vlan 120
  name ANALYS
 vlan 125
- name ANALYS_WIFI
+ name ANALYS_AP
 vlan 135
- name TEST_WIFI
+ name TEST_AP
 vlan 140
  name SERVER
 vlan 150
@@ -590,7 +572,7 @@ vlan 150
 vlan 155
  name SENSOR_DATA
 vlan 199
- name MGMT
+ name MANAGEMENT
 vlan 999
  name SVARTHÅL
 
@@ -667,13 +649,13 @@ spanning-tree mode rapid-pvst
 vlan 110 
  name PERSONAL 
 vlan 115 
- name PERSONAL_WIFI
+ name PERSONAL_AP
 vlan 120
  name ANALYS
 vlan 125
- name ANALYS_WIFI
+ name ANALYS_AP
 vlan 135
- name TEST_WIFI
+ name TEST_AP
 vlan 140
  name SERVER
 vlan 150
@@ -681,7 +663,7 @@ vlan 150
 vlan 155
  name SENSOR_DATA
 vlan 199
- name MGMT
+ name MANAGEMENT
 vlan 999
  name SVARTHÅL
 
