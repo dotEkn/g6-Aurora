@@ -6,7 +6,7 @@ ip domain name aurora.local
 
 interface g0/0
  description WAN_TO_ISP
- ip address 203.0.113.10 255.255.255.255
+ ip address 203.0.113.10 255.255.255.252
  ip nat outside
  no shut
 
