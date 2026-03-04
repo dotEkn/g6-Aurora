@@ -7,8 +7,6 @@ ip domain name aurora.local
 interface g0/0
  description WAN_TO_ISP
  ip address 203.0.113.10 255.255.255.255
- ip access-group FIREWALL-ANTISPOOF in
- ip access-group FW-INBOUND in
  ip nat outside
  no shut
 
@@ -17,14 +15,12 @@ ip route 0.0.0.0 0.0.0.0 203.0.113.9
 interface g0/1
  desc TO_R2
  ip address 10.10.1.1 255.255.255.252
- ip access-group FW-OUTBOUND out
  ip nat inside
  no shut
 
 interface g0/2
  desc TO_R3
  ip address 10.10.1.5 255.255.255.252
- ip access-group FW-OUTBOUND out
  ip nat inside
  no shut
 
