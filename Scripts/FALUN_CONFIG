@@ -42,48 +42,12 @@ ip access-list standard FE-NAT
  deny any
 exit
 
-
-! Anti-spoofing (stoppa privata IP från WAN)
-ip access-list extended FIREWALL-ANTISPOOF
- deny ip 10.0.0.0 0.255.255.255 any
- deny ip 172.16.0.0 0.15.255.255 any
- deny ip 192.168.0.0 0.0.255.255 any
- deny ip 10.10.0.0 0.0.255.255 any
- deny ip 172.16.110.0 0.0.0.255 any
- deny ip 172.16.120.0 0.0.0.255 any
- deny ip 172.16.130.0 0.0.0.255 any
- permit ip any any
-exit
-
-! Inbound WAN → LAN
-ip access-list extended FW-INBOUND
- deny ip any 10.0.0.0 0.255.255.255
- deny ip any 172.16.0.0 0.15.255.255
- deny ip any 192.168.0.0 0.0.255.255
- deny ip any 10.10.0.0 0.0.255.255
-
- ! Tillåt INGET in från WAN just nu
- deny ip any any
-exit
-
-! Outbound LAN → WAN
-ip access-list extended FW-OUTBOUND
- permit udp any any eq 53      ! DNS
- permit udp any any eq 123     ! NTP
- permit tcp any any eq 443     ! HTTPS
- permit tcp any any eq 80      ! HTTP
-
- ! Permits for servers can be added here later
- deny ip any any log
-exit
-
 ! NTP ACL (allow only R2 & R3)
 ip access-list standard NTP-INTERNAL
  permit 10.10.1.2       ! R2 CORE
  permit 10.10.1.6       ! R3 CORE
  deny any
 exit
-
 
 ## ===== NTP SETTINGS =====
 clock timezone CET 1
