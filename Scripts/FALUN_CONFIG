@@ -27,21 +27,6 @@ interface g0/2
 
 ## ===== ACL SECTION =====
 
-! NAT ACL for outbound internet access
-ip access-list standard FE-NAT
- permit 172.16.110.0 0.0.0.255
- permit 172.16.120.0 0.0.0.255
- permit 172.16.130.0 0.0.0.255
- permit 10.10.115.0 0.0.0.255
- permit 10.10.125.0 0.0.0.255
- permit 10.10.135.0 0.0.0.255
- permit 10.10.140.0 0.0.0.255
- permit 10.10.150.0 0.0.0.255
- permit 10.10.155.0 0.0.0.255
- permit 10.10.199.0 0.0.0.255
- deny any
-exit
-
 ! NTP ACL (allow only R2 & R3)
 ip access-list standard NTP-INTERNAL
  permit 10.10.1.2       ! R2 CORE
