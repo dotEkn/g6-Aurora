@@ -35,7 +35,10 @@ interface GigabitEthernet0/0/0
  ip nat outside
  no shut
 
+! --- IP Routes, Statiskt, Falun 172 och 10 nät. ---
 ip route 0.0.0.0 0.0.0.0 203.0.113.1
+ip route 172.16.0.0 255.255.0.0 203.0.113.1 
+ip route 10.10.0.0 255.255.0.0 203.0.113.1
 
 ! TRANSIT (VLAN 5 via SW1)
 interface GigabitEthernet0/0/1
