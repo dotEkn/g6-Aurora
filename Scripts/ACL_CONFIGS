@@ -1,0 +1,119 @@
+--- FALUN FE ---
+
+LITE ACCESSLISTOR FÖR FALUN (FE)
+
+(ACL FÖR R2 & R3)
+- Det denna ACL gör är att sensorer får inte kunna prata på andra interna VLAN
+- bara leverera data till backend.
+
+ip access-list extended FE-SENSOR155-IN
+
+ permit udp 10.10.155.0 0.0.0.255 host 10.10.140.41 eq 67
+
+ permit udp 10.10.155.0 0.0.0.255 host 10.10.140.41 eq 53
+
+ permit ip 10.10.155.0 0.0.0.255 host 10.10.140.40
+
+ deny ip 10.10.155.0 0.0.0.255 any log
+exit
+
+interface GigabitEthernet0/0/1.155
+ ip access-group FE-SENSOR155-IN in
+end
+
+-------------------------------------------------------------------------------------------------------
+(ACL FÖR R2 & R3)
+
+- Endast trafik från IoT-backendserver samt från klienter på analysenhet tillåts att nå servern.
+
+ip access-list extended FE-PROTECT-ANALYS
+ permit ip host 10.10.140.40 host 10.10.140.42
+
+ permit ip 172.16.120.0 0.0.0.255 host 10.10.140.42
+ 
+ permit ip 10.10.199.0 0.0.0.255 host 10.10.140.42
+ 
+ deny ip any host 10.10.140.42 log
+ 
+ permit ip any any
+
+exit
+
+interface g0/0/1.140
+ ip access-group FE-PROTECT-ANALYS out
+end
+-------------------------------------------------------------------------------------------------------
+(ACL FÖR R2 & R3)
+
+- Gäster har åtkomst till internet, ingen åtkomst till interna servrar eller nät.
+
+ip access-list extended FE-GUEST125-INTERNET-ONLY
+ permit udp 10.10.125.0 0.0.0.255 host 10.10.140.41 eq 67
+ permit udp 10.10.125.0 0.0.0.255 host 10.10.140.41 eq 53
+
+ deny 10.10.125.0 0.0.0.255 10.0.0.0 0.255.255.255 log
+ deny 10.10.125.0 0.0.0.255 172.16.0.0 0.15.255.255 log
+ deny 10.10.125.0 0.0.0.255 192.168.0.0 0.0.255.255 log
+
+ permit ip 10.10.125.0 0.0.0.255 any
+
+interface G0/0/1.125
+ ip access-group FE-GUEST-INTERNET-ONLY in
+
+ip access-list extended FE-TEST135-INTERNET-ONLY
+ permit udp 10.10.135.0 0.0.0.255 host 10.10.140.41 eq 67
+ permit udp 10.10.135.0 0.0.0.255 host 10.10.140.41 eq 53
+
+ deny ip 10.10.135.0 0.0.0.255 10.0.0.0 0.255.255.255 log
+ deny ip 10.10.135.0 0.0.0.255 172.16.0.0 0.15.255.255 log
+ deny ip 10.10.135.0 0.0.0.255 192.168.0.0 0.0.255.255 log
+
+ permit ip 10.10.135.0 0.0.0.255 any
+exit
+
+interface GigabitEthernet0/0/1.135
+ ip access-group FE-TEST135-INTERNET-ONLY in
+end
+-------------------------------------------------------------------------------------------------------
+
+--- GÄVLE HK ---
+
+(R2 & R3)
+- Skydda DMZ mot interna VLAN
+
+conf t
+ip access-list extended HK-DMZ-PROTECT
+
+ permit tcp 10.10.0.0 0.0.255.255 host 10.10.10.10 eq 80
+ permit tcp 172.16.0.0 0.0.255.255 host 10.10.10.10 eq 80
+
+ permit ip 10.10.99.0 0.0.0.255 host 10.10.10.10
+
+ deny ip any host 10.10.10.10 log
+
+ permit ip any any
+exit
+
+interface GigabitEthernet0/0/0.10
+ ip access-group HK-DMZ-PROTECT in
+
+-------------------------------------------------------------------------------------------------------
+(R2 & R3)
+- Gästnät endast internet
+
+conf t
+ip access-list extended HK-GUEST-INTERNET-ONLY
+
+ permit udp 172.16.25.0 0.0.0.255 any eq 67
+
+ permit udp 172.16.25.0 0.0.0.255 any eq 53
+
+ deny ip 172.16.25.0 0.0.0.255 10.10.0.0 0.0.255.255 log
+ deny ip 172.16.25.0 0.0.0.255 172.16.0.0 0.0.255.255 log
+
+ permit ip 172.16.25.0 0.0.0.255 any
+exit
+
+interface GigabitEthernet0/0/1.25
+ ip access-group HK-GUEST-INTERNET-ONLY in
+-------------------------------------------------------------------------------------------------------
