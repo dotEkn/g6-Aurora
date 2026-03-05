@@ -86,6 +86,8 @@ ip access-list extended HK-DMZ-PROTECT
 
  permit tcp 10.10.0.0 0.0.255.255 host 10.10.10.10 eq 80
  permit tcp 172.16.0.0 0.0.255.255 host 10.10.10.10 eq 80
+ permit tcp 172.16.120.0 0.0.0.255 host 10.10.10.10 eq 80
+ permit tcp 10.10.140.0 0.0.0.255 host 10.10.10.10 eq 80
 
  permit ip 10.10.99.0 0.0.0.255 host 10.10.10.10
 
@@ -117,3 +119,181 @@ exit
 interface GigabitEthernet0/0/1.25
  ip access-group HK-GUEST-INTERNET-ONLY in
 -------------------------------------------------------------------------------------------------------
+
+
+--- BRANDVÄGGAR ---
+!!!GÄVLE FÖRST!!!
+(R1-HK)
+
+conf t
+ip access-list extended HK-EDGE-IN
+ permit udp host 203.0.113.10 host 203.0.113.2 eq 500
+ permit udp host 203.0.113.10 host 203.0.113.2 eq 4500
+ permit esp host 203.0.113.10 host 203.0.113.2
+end
+
+conf t
+crypto ikev2 proposal AURORA-PROP
+ encryption aes-cbc-256
+ integrity sha256
+ group 14
+exit
+
+crypto ikev2 policy AURORA-POL
+ proposal AURORA-PROP
+exit
+
+crypto ikev2 keyring AURORA-KR
+ peer FE
+  address 203.0.113.10
+  pre-shared-key AURORA-VPN
+exit
+
+crypto ikev2 profile AURORA-IKEV2-PROF
+ match identity remote address 203.0.113.10 255.255.255.255
+ authentication local pre-share
+ authentication remote pre-share
+ keyring local AURORA-KR
+exit
+
+crypto ipsec transform-set AURORA-TS esp-aes 256 esp-sha256-hmac
+ mode tunnel
+exit
+
+crypto ipsec profile AURORA-IPSEC-PROF
+ set transform-set AURORA-TS
+ set ikev2-profile AURORA-IKEV2-PROF
+exit
+
+conf t
+interface Tunnel0
+ description VTI_TO_FALUN
+ ip address 10.255.255.1 255.255.255.252
+ tunnel source GigabitEthernet0/0/0
+ tunnel mode ipsec ipv4
+ tunnel destination 203.0.113.10
+ tunnel protection ipsec profile AURORA-IPSEC-PROF
+ no shut
+end
+
+conf t
+ip route 10.10.140.0 255.255.255.0 Tunnel0
+ip route 10.10.199.0 255.255.255.0 Tunnel0
+ip route 172.16.120.0 255.255.255.0 Tunnel0
+end
+
+conf t
+ip access-list extended HK-NAT-INET
+ deny ip 10.10.10.0 0.0.0.255 10.10.140.0 0.0.0.255
+ deny ip 10.10.10.0 0.0.0.255 10.10.199.0 0.0.0.255
+ deny ip 10.10.10.0 0.0.0.255 172.16.120.0 0.0.0.255
+ deny ip 10.10.40.0 0.0.0.255 10.10.140.0 0.0.0.255
+ deny ip 10.10.40.0 0.0.0.255 10.10.199.0 0.0.0.255
+ deny ip 10.10.40.0 0.0.0.255 172.16.120.0 0.0.0.255
+ deny ip 10.10.99.0 0.0.0.255 10.10.140.0 0.0.0.255
+ deny ip 10.10.99.0 0.0.0.255 10.10.199.0 0.0.0.255
+ deny ip 10.10.99.0 0.0.0.255 172.16.120.0 0.0.0.255
+
+ permit ip 10.10.10.0 0.0.0.255 any
+ permit ip 10.10.40.0 0.0.0.255 any
+ permit ip 10.10.99.0 0.0.0.255 any
+ permit ip 172.16.20.0 0.0.0.255 any
+ permit ip 172.16.25.0 0.0.0.255 any
+ permit ip 172.16.30.0 0.0.0.255 any
+ permit ip 172.16.35.0 0.0.0.255 any
+exit
+
+route-map HK-NAT permit 10
+ match ip address HK-NAT-INET
+exit
+
+no ip nat inside source list 10 interface GigabitEthernet0/0/0 overload
+ip nat inside source route-map HK-NAT interface GigabitEthernet0/0/0 overload
+end
+-------------------------------------------------------------------------------------------------------
+
+!!! BRANDVÄGG FALUN (FE) !!!
+(R1-FE)
+
+conf t
+crypto ikev2 proposal AURORA-PROP
+ encryption aes-cbc-256
+ integrity sha256
+ group 14
+exit
+
+crypto ikev2 policy AURORA-POL
+ proposal AURORA-PROP
+exit
+
+crypto ikev2 keyring AURORA-KR
+ peer HK
+  address 203.0.113.2
+  pre-shared-key AURORA-VPN
+exit
+
+crypto ikev2 profile AURORA-IKEV2-PROF
+ match identity remote address 203.0.113.2 255.255.255.255
+ authentication local pre-share
+ authentication remote pre-share
+ keyring local AURORA-KR
+exit
+
+crypto ipsec transform-set AURORA-TS esp-aes 256 esp-sha256-hmac
+ mode tunnel
+exit
+
+crypto ipsec profile AURORA-IPSEC-PROF
+ set transform-set AURORA-TS
+ set ikev2-profile AURORA-IKEV2-PROF
+exit
+end
+
+conf t
+interface Tunnel0
+ description VTI_TO_GAVLE
+ ip address 10.255.255.2 255.255.255.252
+ tunnel source GigabitEthernet0/0
+ tunnel mode ipsec ipv4
+ tunnel destination 203.0.113.2
+ tunnel protection ipsec profile AURORA-IPSEC-PROF
+ no shut
+end
+
+conf t
+ip route 10.10.10.0 255.255.255.0 Tunnel0
+ip route 10.10.40.0 255.255.255.0 Tunnel0
+ip route 10.10.99.0 255.255.255.0 Tunnel0
+end
+
+conf t
+ip access-list extended FE-NAT-INET
+ deny ip 10.10.140.0 0.0.0.255 10.10.10.0 0.0.0.255
+ deny ip 10.10.140.0 0.0.0.255 10.10.40.0 0.0.0.255
+ deny ip 10.10.140.0 0.0.0.255 10.10.99.0 0.0.0.255
+ deny ip 10.10.199.0 0.0.0.255 10.10.10.0 0.0.0.255
+ deny ip 10.10.199.0 0.0.0.255 10.10.40.0 0.0.0.255
+ deny ip 10.10.199.0 0.0.0.255 10.10.99.0 0.0.0.255
+ deny ip 172.16.120.0 0.0.0.255 10.10.10.0 0.0.0.255
+ deny ip 172.16.120.0 0.0.0.255 10.10.40.0 0.0.0.255
+ deny ip 172.16.120.0 0.0.0.255 10.10.99.0 0.0.0.255
+
+ permit ip 172.16.110.0 0.0.0.255 any
+ permit ip 172.16.120.0 0.0.0.255 any
+ permit ip 172.16.130.0 0.0.0.255 any
+ permit ip 10.10.115.0 0.0.0.255 any
+ permit ip 10.10.125.0 0.0.0.255 any
+ permit ip 10.10.135.0 0.0.0.255 any
+ permit ip 10.10.140.0 0.0.0.255 any
+ permit ip 10.10.150.0 0.0.0.255 any
+ permit ip 10.10.155.0 0.0.0.255 any
+ permit ip 10.10.199.0 0.0.0.255 any
+exit
+
+route-map FE-NAT permit 10
+ match ip address FE-NAT-INET
+exit
+
+no ip nat inside source list FE-NAT interface g0/0 overload
+ip nat inside source route-map FE-NAT interface g0/0 overload
+end
