@@ -457,21 +457,21 @@ interface Vlan99
 interface Gi1/0/15
  description trunk_to_R2_G0/0/1
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 99
  switchport trunk allowed vlan 20,25,30,35,40,99
 
 ! Trunk till SW3
 interface range Gi1/0/21-22
  description trunk_to_SW3
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 99
  switchport trunk allowed vlan 20,25,30,35,40,99
 
 ! Trunk till SW4
 interface range Gi1/0/23-24
  description trunk_to_SW4
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 99
  switchport trunk allowed vlan 20,25,30,35,40,99
 
 ! Exempel accessport: Server VLAN 40
