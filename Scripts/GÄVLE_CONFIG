@@ -413,6 +413,13 @@ interface Gi1/0/1
  switchport access vlan 10
  spanning-tree portfast
 
+! SVARTHÅL PORTAR
+interface range g1/0/2 - 14, g1/0/18 - 24
+ desc SVARTHÅL
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+
 end
 
 
@@ -474,6 +481,12 @@ interface Gi1/0/1
  switchport access vlan 40
  spanning-tree portfast
  spanning-tree bpduguard enable
+
+! interface range G1/0/1 - 14, G1/0/20
+ desc SVARTHÅL
+ switchport mode access
+ switchport mode access vlan 999
+ shutdown
 
 end
 
@@ -544,6 +557,13 @@ interface Gi1/0/16
  spanning-tree portfast
  spanning-tree bpduguard enable
 
+! SVARTHÅL
+interface range g1/0/2 - 14, g1/0/17 - 20
+ desc SVARTHÅL
+ switchport mode access
+ switchport mode access vlan 999
+ shutdown
+
 end
 wr
 
@@ -606,5 +626,12 @@ interface Gi1/0/15
  switchport access vlan 35
  spanning-tree portfast
  spanning-tree bpduguard enable
+
+! SVARTHÅL
+interface range G1/0/2 - 12, G1/0/16-20
+ desc SVARTHÅL
+ switchport mode access
+ switchport mode access vlan 999
+ shutdown
 
 end
