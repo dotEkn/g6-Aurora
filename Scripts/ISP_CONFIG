@@ -10,7 +10,7 @@ interface GigabitEthernet0/0
 
 ! ===== Interface mot Falun =====
 interface GigabitEthernet0/1
- description TO_R1_HK
+ description TO_R1_FE
  ip address 203.0.113.1 255.255.255.252
  no shut
 
@@ -21,13 +21,22 @@ interface GigabitEthernet0/2
  no shut
 
 ! ===== Routing =====
-! Trafik mot Falun
-ip route 172.16.0.0 255.255.0.0 203.0.113.10
-ip route 10.10.0.0 255.255.0.0 203.0.113.10
 
 ! Trafik mot Gävle
-ip route 10.10.5.0 255.255.255.0 203.0.113.2
-ip route 10.10.0.0 255.255.0.0 203.0.113.2
+ip route 10.10.10.0 255.255.255.0 203.0.113.2
+ip route 10.10.40.0 255.255.255.0 203.0.113.2
+ip route 10.10.99.0 255.255.255.0 203.0.113.2
+
+! Trafik mot Falun
+ip route 172.16.110.0 255.255.255.0 203.0.113.10
+ip route 172.16.120.0 255.255.255.0 203.0.113.10
+ip route 10.10.115.0 255.255.255.0 203.0.113.10
+ip route 10.10.125.0 255.255.255.0 203.0.113.10
+ip route 10.10.135.0 255.255.255.0 203.0.113.10
+ip route 10.10.140.0 255.255.255.0 203.0.113.10
+ip route 10.10.150.0 255.255.255.0 203.0.113.10
+ip route 10.10.155.0 255.255.255.0 203.0.113.10
+ip route 10.10.199.0 255.255.255.0 203.0.113.10
 
 end
 wr
