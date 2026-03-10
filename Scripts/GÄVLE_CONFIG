@@ -39,8 +39,6 @@ interface GigabitEthernet0/0/0
 
 ! --- IP Routes, Statiskt, Falun 172 och 10 nät. ---
 ip route 0.0.0.0 0.0.0.0 203.0.113.1
-ip route 172.16.0.0 255.255.0.0 203.0.113.1 
-ip route 10.10.0.0 255.255.0.0 203.0.113.1
 
 ! TRANSIT (VLAN 99 via SW1)
 interface GigabitEthernet0/0/1
@@ -67,6 +65,7 @@ router ospf 10
  router-id 1.1.1.1
  passive-interface default
  no passive-interface GigabitEthernet0/0/1
+ network 10.10.10.0 0.0.0.255 area 0
  network 10.10.99.0 0.0.0.255 area 0
  default-information originate
 
@@ -102,7 +101,7 @@ interface GigabitEthernet0/0/0
 
 interface GigabitEthernet0/0/0.99
  encapsulation dot1Q 99
- ip address 10.10.99.2 255.255.255.0
+ ip address 10.10.99.4 255.255.255.0
  ipv6 address 2001:DB8:ABCD:99::2/64
  ipv6 address FE80::2A link-local
  ipv6 ospf 10 area 0
@@ -113,7 +112,8 @@ interface GigabitEthernet0/0/0.10
  ip address 10.10.10.2 255.255.255.0
  ipv6 address 2001:DB8:ABCD:10::2/64
  ipv6 address FE80::2B link-local
- standby 10 ip 10.10.10.3
+ standby version 2
+ standby 10 ip 10.10.10.1
  standby 10 ipv6 FE80::1
  standby 10 ipv6 2001:DB8:ABCD:10::1
  standby 10 priority 110
@@ -195,25 +195,16 @@ interface GigabitEthernet0/0/1.40
  standby 40 preempt
  ipv6 ospf 10 area 0
 
-interface GigabitEthernet0/0/1.99
- encapsulation dot1Q 99
- ip address 10.10.99.2 255.255.255.0
- ipv6 address 2001:DB8:ABCD:99::2/64
- ipv6 address FE80::299 link-local
- standby version 2
- standby 99 ip 10.10.99.1
- standby 99 ipv6 FE80::1
- standby 99 ipv6 2001:DB8:ABCD:99::1
- standby 99 priority 110
- standby 99 preempt
- ipv6 ospf 10 area 0
-
 ! ====== OSPF ======
 router ospf 10
  router-id 2.2.2.2
- passive-interface default
- no passive-interface GigabitEthernet0/0/0.5
- network 10.10.5.0 0.0.0.255 area 0
+ no passive-interface GigabitEthernet0/0/0.99
+ no passive-interface GigabitEthernet0/0/0.10
+ no passive-interface GigabitEthernet0/0/1.20
+ no passive-interface GigabitEthernet0/0/1.25
+ no passive-interface GigabitEthernet0/0/1.30
+ no passive-interface GigabitEthernet0/0/1.35
+ no passive-interface GigabitEthernet0/0/1.40
  network 10.10.10.0 0.0.0.255 area 0
  network 10.10.40.0 0.0.0.255 area 0
  network 10.10.99.0 0.0.0.255 area 0
@@ -250,7 +241,7 @@ interface GigabitEthernet0/0/0.10
  ipv6 address 2001:DB8:ABCD:10::3/64
  ipv6 address FE80::3B link-local
  standby version 2
- standby 10 ip 10.10.10.2
+ standby 10 ip 10.10.10.1
  standby 10 ipv6 FE80::1
  standby 10 ipv6 2001:DB8:ABCD:10::1
  standby 10 priority 100
@@ -332,25 +323,16 @@ interface GigabitEthernet0/0/1.40
  standby 40 preempt
  ipv6 ospf 10 area 0
 
-interface GigabitEthernet0/0/1.99
- encapsulation dot1Q 99
- ip address 10.10.99.3 255.255.255.0
- ipv6 address 2001:DB8:ABCD:99::3/64
- ipv6 address FE80::399 link-local
- standby version 2
- standby 99 ip 10.10.99.1
- standby 99 ipv6 FE80::1
- standby 99 ipv6 2001:DB8:ABCD:99::1
- standby 99 priority 100
- standby 99 preempt
- ipv6 ospf 10 area 0
-
 ! ====== OSPF ======
 router ospf 10
  router-id 3.3.3.3
- passive-interface default
- no passive-interface GigabitEthernet0/0/0.5
- network 10.10.5.0 0.0.0.255 area 0
+ no passive-interface GigabitEthernet0/0/0.99
+ no passive-interface GigabitEthernet0/0/0.10
+ no passive-interface GigabitEthernet0/0/1.20
+ no passive-interface GigabitEthernet0/0/1.25
+ no passive-interface GigabitEthernet0/0/1.30
+ no passive-interface GigabitEthernet0/0/1.35
+ no passive-interface GigabitEthernet0/0/1.40
  network 10.10.10.0 0.0.0.255 area 0
  network 10.10.40.0 0.0.0.255 area 0
  network 10.10.99.0 0.0.0.255 area 0
@@ -414,7 +396,7 @@ interface Gi1/0/1
  spanning-tree portfast
 
 ! SVARTHÅL PORTAR
-interface range g1/0/2 - 14, g1/0/18 - 24
+interface range g1/0/2-14,g1/0/18-24
  desc SVARTHÅL
  switchport mode access
  switchport access vlan 999
@@ -482,10 +464,11 @@ interface Gi1/0/1
  spanning-tree portfast
  spanning-tree bpduguard enable
 
-! interface range G1/0/1 - 14, G1/0/20
+! Portar till svarthål
+interface range G1/0/1-14,G1/0/20
  desc SVARTHÅL
  switchport mode access
- switchport mode access vlan 999
+ switchport access vlan 999
  shutdown
 
 end
@@ -558,10 +541,10 @@ interface Gi1/0/16
  spanning-tree bpduguard enable
 
 ! SVARTHÅL
-interface range g1/0/2 - 14, g1/0/17 - 20
+interface range g1/0/2-14,g1/0/17-20
  desc SVARTHÅL
  switchport mode access
- switchport mode access vlan 999
+ switchport access vlan 999
  shutdown
 
 end
@@ -628,10 +611,10 @@ interface Gi1/0/15
  spanning-tree bpduguard enable
 
 ! SVARTHÅL
-interface range G1/0/2 - 12, G1/0/16-20
+interface range G1/0/16-20
  desc SVARTHÅL
  switchport mode access
- switchport mode access vlan 999
+ switchport access vlan 999
  shutdown
 
 end
