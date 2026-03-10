@@ -115,7 +115,7 @@ interface GigabitEthernet0/0/0.10
  standby version 2
  standby 10 ip 10.10.10.1
  standby 10 ipv6 FE80::1
- standby 10 ipv6 2001:DB8:ABCD:10::1
+ standby 10 ipv6 address 2001:DB8:ABCD:10::1
  standby 10 priority 110
  standby 10 preempt
  ipv6 ospf 10 area 0
