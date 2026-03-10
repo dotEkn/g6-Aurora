@@ -383,7 +383,7 @@ spanning-tree vlan 110,115,120,125,130,135,140,150,155,199 root primary
 interface Gi1/0/15
  description TRUNK_TO_R2-FE_G0/0/1
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 ! Servers VLAN 140
@@ -405,28 +405,28 @@ interface range Gi1/0/1-14, Gi1/0/17-20, Gi1/0/25-28
 interface range Gi1/0/21-22
  description LACP_TO_SW2
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
  channel-group 1 mode active
 
 interface Port-channel1
  description PO12_TO_SW2
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 ! ===== Po13 till SW3 (Gi1/0/23-24) =====
 interface range Gi1/0/23-24
  description LACP_TO_SW3
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
  channel-group 2 mode active
 
 interface Port-channel2
  description PO13_TO_SW3
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 
@@ -482,7 +482,7 @@ spanning-tree vlan 110,115,120,135,140,150,155,199 root secondary
 interface Gi1/0/15
  description TRUNK_TO_R3-FE_G0/0/1
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 ! Personal PC VLAN110
@@ -512,28 +512,28 @@ interface Gi1/0/16
 interface range Gi1/0/23-24
  description LACP_TO_SW1
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
  channel-group 1 mode active
 
 interface Port-channel1
  description PO12_TO_SW1
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 ! ===== Po24 till SW4 (Gi1/0/21-22) =====
 interface range Gi1/0/21-22
  description LACP_TO_SW4
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
  channel-group 3 mode active
 
 interface Port-channel3
  description PO24_TO_SW4
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 ## ===== NTP SETTINGS =====
@@ -601,28 +601,28 @@ interface range Gi1/0/1-14, Gi1/0/16-20, Gi1/0/25-28
 interface range Gi1/0/21-22
  description LACP_TO_SW1
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
  channel-group 2 mode active
 
 interface Port-channel2
  description PO13_TO_SW1
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 ! ===== Po34 till SW4 (Gi1/0/23-24) =====
 interface range Gi1/0/23-24
  description LACP_TO_SW4
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
  channel-group 4 mode active
 
 interface Port-channel4
  description PO34_TO_SW4
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 
@@ -707,28 +707,28 @@ interface range Gi1/0/17 - 20, Gi1/0/25-28
 interface range Gi1/0/21-22
  description LACP_TO_SW2
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
  channel-group 3 mode active
 
 interface Port-channel3
  description PO24_TO_SW2
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 ! ===== Po34 till SW3 (Gi1/0/23-24) =====
 interface range Gi1/0/23-24
  description LACP_TO_SW3
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
  channel-group 4 mode active
 
 interface Port-channel4
  description PO34_TO_SW3
  switchport mode trunk
- switchport trunk native vlan 999
+ switchport trunk native vlan 199
  switchport trunk allowed vlan 110,115,120,125,130,135,140,150,155,199
 
 
