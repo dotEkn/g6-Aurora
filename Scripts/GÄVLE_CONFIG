@@ -34,6 +34,11 @@ interface GigabitEthernet0/0/0
 
 ! --- IP Routes ---
 ip route 0.0.0.0 0.0.0.0 203.0.113.1
+ip route 172.16.0.0 255.255.0.0 203.0.113.1
+ip route 10.10.100.0 255.255.255.0 203.0.113.1
+ip route 10.10.140.0 255.255.255.0 203.0.113.1
+exit
+
 
 ! NATIVE (VLAN 99 via SW1)
 interface GigabitEthernet0/0/1
