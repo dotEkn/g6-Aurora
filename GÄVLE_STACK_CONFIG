@@ -1,0 +1,329 @@
+# Docker WordPress + Python FTP + Syslog Logging Lab
+
+This guide shows how to set up a **containerized environment** where:
+
+* WordPress runs in its own container
+* A Python FTP server runs in its own container
+* A Syslog server collects logs from both containers
+
+Everything runs using **Docker Compose**.
+
+---
+
+# 1. Prerequisites
+
+Install Docker and Docker Compose.
+
+### Ubuntu / Debian
+
+```bash
+sudo apt update
+sudo apt install docker.io docker-compose-plugin
+```
+
+Enable Docker:
+
+```bash
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+Verify installation:
+
+```bash
+docker --version
+docker compose version
+```
+
+---
+
+# 2. Create Project Folder
+
+Create a working directory.
+
+```bash
+mkdir gävle-internal-stack
+cd gävle-internal-stack
+```
+
+Create directories for the containers:
+
+```bash
+mkdir ftp
+mkdir syslog
+```
+
+Your structure should look like:
+
+```
+gävle-internal-stack
+│
+├── docker-compose.yml
+├── ftp
+│   └── Dockerfile
+└── syslog
+    └── rsyslog.conf
+```
+
+---
+
+# 3. Create the FTP Container
+
+Create the Dockerfile:
+
+```bash
+nano ftp/Dockerfile
+```
+
+Paste:
+
+```dockerfile
+FROM python:3.11
+
+RUN pip install pyftpdlib
+
+WORKDIR /ftp
+
+RUN mkdir data
+
+CMD python -m pyftpdlib -i 0.0.0.0 -p 2121 -d /ftp/data -w
+```
+
+This container:
+
+* installs `pyftpdlib`
+* runs an FTP server
+* listens on port **2121**
+* stores files in `/ftp/data`
+
+---
+
+# 4. Create the Syslog Configuration
+
+Create the configuration file:
+
+```bash
+nano syslog/rsyslog.conf
+```
+
+Paste:
+
+```
+module(load="imudp")
+input(type="imudp" port="514")
+
+module(load="imtcp")
+input(type="imtcp" port="514")
+
+*.* /var/log/remote.log
+```
+
+This config:
+
+* enables UDP syslog
+* enables TCP syslog
+* stores all logs in `/var/log/remote.log`
+
+---
+
+# 5. Create docker-compose.yml
+
+Create the compose file:
+
+```bash
+nano docker-compose.yml
+```
+
+Paste:
+
+```yaml
+version: "3.8"
+
+services:
+
+  syslog:
+    image: rsyslog/syslog_appliance_alpine
+    container_name: syslog
+    ports:
+      - "514:514/udp"
+      - "514:514/tcp"
+    volumes:
+      - ./syslog/rsyslog.conf:/etc/rsyslog.conf
+
+  ftp:
+    build: ./ftp
+    container_name: ftpserver
+    ports:
+      - "2121:2121"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://syslog:514"
+        tag: "ftp"
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    ports:
+      - "8080:80"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://syslog:514"
+        tag: "wordpress"
+```
+
+This configuration runs:
+
+* syslog server
+* FTP server
+* WordPress server
+
+All logs are forwarded to the syslog container.
+
+---
+
+# 6. Start the Stack
+
+Run:
+
+```bash
+docker compose up -d
+```
+
+Docker will:
+
+* build the FTP container
+* download WordPress
+* start the syslog server
+
+---
+
+# 7. Verify Containers
+
+Check running containers:
+
+```bash
+docker ps
+```
+
+You should see:
+
+```
+syslog
+ftpserver
+wordpress
+```
+
+---
+
+# 8. Access the Services
+
+### WordPress
+
+Open in browser:
+
+```
+http://localhost:8080
+```
+
+Follow the WordPress installation wizard.
+
+---
+
+### FTP Server
+
+Connect using an FTP client.
+
+Example:
+
+```
+Host: localhost
+Port: 2121
+```
+
+---
+
+# 9. View Syslog Logs
+
+Enter the syslog container:
+
+```bash
+docker exec -it syslog sh
+```
+
+View logs:
+
+```bash
+tail -f /var/log/remote.log
+```
+
+Example output:
+
+```
+wordpress: GET /index.php
+wordpress: PHP warning
+
+ftp: connection from 172.18.0.3
+ftp: upload test.txt
+```
+
+---
+
+# 10. Stop the Environment
+
+Stop containers:
+
+```bash
+docker compose down
+```
+
+---
+
+# 11. Restart Later
+
+Start again with:
+
+```bash
+docker compose up -d
+```
+
+---
+
+# 12. Useful Debug Commands
+
+View container logs:
+
+```
+docker logs ftpserver
+docker logs wordpress
+docker logs syslog
+```
+
+View all containers:
+
+```
+docker ps -a
+```
+
+Rebuild containers:
+
+```
+docker compose up --build
+```
+
+---
+
+# 13. Possible Improvements
+
+We can extend this setup with:
+
+* a **MariaDB container** for WordPress persistence
+* **phpMyAdmin** for database administration
+* **Graylog or ELK** for searchable logs
+* **Grafana dashboards**
+* **reverse proxy with HTTPS**
+
+This turns the environment into a full **logging and monitoring lab**.
+
+---
