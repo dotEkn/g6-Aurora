@@ -99,6 +99,40 @@ no ip domain lookup
 ip domain name aurora.local
 ipv6 unicast-routing
 
+! Exkludera DHCP adresser
+ip dhcp excluded-address 172.16.20.1 172.16.20.50
+ip dhcp excluded-address 172.16.20.201 172.16.20.254
+ip dhcp excluded-address 10.10.25.1 10.10.25.50
+ip dhcp excluded-address 10.10.25.201 10.10.25.254
+ip dhcp excluded-address 172.16.30.1 172.16.30.50
+ip dhcp excluded-address 172.16.30.201 172.16.30.254
+ip dhcp excluded-address 10.10.35.1 10.10.35.50
+ip dhcp excluded-address 10.10.35.201 10.10.35.254
+
+! DHCP pool för VLAN 20
+ip dhcp pool VLAN20_KONFERENS
+ network 172.16.20.0 255.255.255.0
+ default-router 172.16.20.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 25
+ip dhcp pool VLAN25_KONF_GAST
+ network 10.10.25.0 255.255.255.0
+ default-router 10.10.25.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 30
+ip dhcp pool VLAN30_KONTOR
+ network 172.16.30.0 255.255.255.0
+ default-router 172.16.30.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 35
+ip dhcp pool VLAN35_KONTOR_AP
+ network 10.10.35.0 255.255.255.0
+ default-router 10.10.35.1
+ dns-server 8.8.8.8
+
 ! ====== TRUNK till SW1 (bär VLAN 5, 10, 99) ======
 interface GigabitEthernet0/0/0
  description TRUNK_TO_SW1
@@ -155,7 +189,6 @@ interface GigabitEthernet0/0/1.20
  standby 20 ipv6 FE80::1
  standby 20 priority 110
  standby 20 preempt
- ip helper-address 10.10.40.41
  ipv6 ospf 10 area 0
 
 interface GigabitEthernet0/0/1.25
@@ -168,7 +201,6 @@ interface GigabitEthernet0/0/1.25
  standby 25 ipv6 FE80::1
  standby 25 priority 110
  standby 25 preempt
- ip helper-address 10.10.40.41
  ipv6 ospf 10 area 0
 
 interface GigabitEthernet0/0/1.30
@@ -181,7 +213,6 @@ interface GigabitEthernet0/0/1.30
  standby 30 ipv6 FE80::1
  standby 30 priority 110
  standby 30 preempt
- ip helper-address 10.10.40.41
  ipv6 ospf 10 area 0
 
 interface GigabitEthernet0/0/1.35
@@ -194,7 +225,6 @@ interface GigabitEthernet0/0/1.35
  standby 35 ipv6 FE80::1
  standby 35 priority 110
  standby 35 preempt
- ip helper-address 10.10.40.41
  ipv6 ospf 10 area 0
 
 interface GigabitEthernet0/0/1.40
@@ -237,6 +267,41 @@ hostname R3-HK
 no ip domain lookup
 ip domain name aurora.local
 ipv6 unicast-routing
+
+! Exkludera DHCP adresser
+ip dhcp excluded-address 172.16.20.1 172.16.20.50
+ip dhcp excluded-address 172.16.20.201 172.16.20.254
+ip dhcp excluded-address 10.10.25.1 10.10.25.50
+ip dhcp excluded-address 10.10.25.201 10.10.25.254
+ip dhcp excluded-address 172.16.30.1 172.16.30.50
+ip dhcp excluded-address 172.16.30.201 172.16.30.254
+ip dhcp excluded-address 10.10.35.1 10.10.35.50
+ip dhcp excluded-address 10.10.35.201 10.10.35.254
+
+! DHCP pool för VLAN 20
+ip dhcp pool VLAN20_KONFERENS
+ network 172.16.20.0 255.255.255.0
+ default-router 172.16.20.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 25
+ip dhcp pool VLAN25_KONF_GAST
+ network 10.10.25.0 255.255.255.0
+ default-router 10.10.25.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 30
+ip dhcp pool VLAN30_KONTOR
+ network 172.16.30.0 255.255.255.0
+ default-router 172.16.30.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 35
+ip dhcp pool VLAN35_KONTOR_AP
+ network 10.10.35.0 255.255.255.0
+ default-router 10.10.35.1
+ dns-server 8.8.8.8
+
 
 ! ====== TRUNK till SW1 (bär VLAN 5, 10, 99) ======
 interface GigabitEthernet0/0/0
@@ -294,7 +359,6 @@ interface GigabitEthernet0/0/1.20
  standby 20 ipv6 FE80::1
  standby 20 priority 100
  standby 20 preempt
- ip helper-address 10.10.40.41
  ipv6 ospf 10 area 0
 
 interface GigabitEthernet0/0/1.25
@@ -307,7 +371,6 @@ interface GigabitEthernet0/0/1.25
  standby 25 ipv6 FE80::1
  standby 25 priority 100
  standby 25 preempt
- ip helper-address 10.10.40.41
  ipv6 ospf 10 area 0
 
 interface GigabitEthernet0/0/1.30
@@ -320,7 +383,6 @@ interface GigabitEthernet0/0/1.30
  standby 30 ipv6 FE80::1
  standby 30 priority 100
  standby 30 preempt
- ip helper-address 10.10.40.41
  ipv6 ospf 10 area 0
 
 interface GigabitEthernet0/0/1.35
@@ -333,7 +395,6 @@ interface GigabitEthernet0/0/1.35
  standby 35 ipv6 FE80::1
  standby 35 priority 100
  standby 35 preempt
- ip helper-address 10.10.40.41
  ipv6 ospf 10 area 0
 
 interface GigabitEthernet0/0/1.40
