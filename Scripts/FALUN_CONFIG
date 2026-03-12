@@ -93,6 +93,62 @@ hostname R2
 no ip domain lookup
 ip domain name aurora.local
 
+! Exkludera DHCP adresser
+ip dhcp excluded-address 172.16.110.1 172.16.110.50
+ip dhcp excluded-address 172.16.110.201 172.16.110.254
+ip dhcp excluded-address 10.10.115.1 10.10.115.50
+ip dhcp excluded-address 10.10.115.201 10.10.115.254
+ip dhcp excluded-address 172.16.120.1 172.16.120.50
+ip dhcp excluded-address 172.16.120.201 172.16.120.254
+ip dhcp excluded-address 10.10.125.1 10.10.125.50
+ip dhcp excluded-address 10.10.125.201 10.10.125.254
+ip dhcp excluded-address 10.10.135.1 10.10.135.50
+ip dhcp excluded-address 10.10.135.201 10.10.135.254
+ip dhcp excluded-address 10.10.150.1 10.10.150.50
+ip dhcp excluded-address 10.10.150.201 10.10.150.254
+
+! DHCP pool för VLAN 110
+ip dhcp pool VLAN110_PERSONAL
+ network 172.16.110.0 255.255.255.0
+ default-router 172.16.110.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 115
+ip dhcp pool VLAN115_PERSONAL_AP
+ network 10.10.115.0 255.255.255.0
+ default-router 10.10.115.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 120
+ip dhcp pool VLAN120_KONFERENS
+ network 172.16.120.0 255.255.255.0
+ default-router 172.16.120.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 125
+ip dhcp pool VLAN125_KONF_GAST
+ network 10.10.125.0 255.255.255.0
+ default-router 10.10.125.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 130
+ip dhcp pool VLAN130_KONTOR
+ network 172.16.130.0 255.255.255.0
+ default-router 172.16.130.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 135
+ip dhcp pool VLAN135_KONTOR_AP
+ network 10.10.135.0 255.255.255.0
+ default-router 10.10.135.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 150
+ip dhcp pool VLAN150_SENSOR_AP
+ network 10.10.150.0 255.255.255.0
+ default-router 10.10.150.1
+ dns-server 8.8.8.8
+
 interface g0/0/0
  ip address 10.10.1.2 255.255.255.252
  no shut
@@ -124,7 +180,6 @@ interface GigabitEthernet0/0/1.110
  standby 110 ip 172.16.110.1
  standby 110 priority 110
  standby 110 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 115 Personal AP
 interface GigabitEthernet0/0/1.115
@@ -133,7 +188,6 @@ interface GigabitEthernet0/0/1.115
  standby 115 ip 10.10.115.1
  standby 115 priority 110
  standby 115 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 120 Analys
 interface GigabitEthernet0/0/1.120
@@ -142,7 +196,6 @@ interface GigabitEthernet0/0/1.120
  standby 120 ip 172.16.120.1
  standby 120 priority 110
  standby 120 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 125 Analys AP
 interface GigabitEthernet0/0/1.125
@@ -151,7 +204,7 @@ interface GigabitEthernet0/0/1.125
  standby 125 ip 10.10.125.1
  standby 125 priority 110
  standby 125 preempt
- ip helper-address 10.10.140.41
+
 
 ! VLAN 135 Test AP
 interface GigabitEthernet0/0/1.135
@@ -160,7 +213,6 @@ interface GigabitEthernet0/0/1.135
  standby 135 ip 10.10.135.1
  standby 135 priority 110
  standby 135 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 140 Server
 interface GigabitEthernet0/0/1.140
@@ -177,7 +229,6 @@ interface GigabitEthernet0/0/1.150
  standby 150 ip 10.10.150.1
  standby 150 priority 110
  standby 150 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 155 Sensor data
 interface GigabitEthernet0/0/1.155
@@ -237,6 +288,63 @@ hostname R3
 no ip domain lookup
 ip domain name aurora.local
 
+
+! Exkludera DHCP adresser
+ip dhcp excluded-address 172.16.110.1 172.16.110.50
+ip dhcp excluded-address 172.16.110.201 172.16.110.254
+ip dhcp excluded-address 10.10.115.1 10.10.115.50
+ip dhcp excluded-address 10.10.115.201 10.10.115.254
+ip dhcp excluded-address 172.16.120.1 172.16.120.50
+ip dhcp excluded-address 172.16.120.201 172.16.120.254
+ip dhcp excluded-address 10.10.125.1 10.10.125.50
+ip dhcp excluded-address 10.10.125.201 10.10.125.254
+ip dhcp excluded-address 10.10.135.1 10.10.135.50
+ip dhcp excluded-address 10.10.135.201 10.10.135.254
+ip dhcp excluded-address 10.10.150.1 10.10.150.50
+ip dhcp excluded-address 10.10.150.201 10.10.150.254
+
+! DHCP pool för VLAN 110
+ip dhcp pool VLAN110_PERSONAL
+ network 172.16.110.0 255.255.255.0
+ default-router 172.16.110.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 115
+ip dhcp pool VLAN115_PERSONAL_AP
+ network 10.10.115.0 255.255.255.0
+ default-router 10.10.115.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 120
+ip dhcp pool VLAN120_KONFERENS
+ network 172.16.120.0 255.255.255.0
+ default-router 172.16.120.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 125
+ip dhcp pool VLAN125_KONF_GAST
+ network 10.10.125.0 255.255.255.0
+ default-router 10.10.125.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 130
+ip dhcp pool VLAN130_KONTOR
+ network 172.16.130.0 255.255.255.0
+ default-router 172.16.130.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 135
+ip dhcp pool VLAN135_KONTOR_AP
+ network 10.10.135.0 255.255.255.0
+ default-router 10.10.135.1
+ dns-server 8.8.8.8
+
+! DHCP pool för VLAN 150
+ip dhcp pool VLAN150_SENSOR_AP
+ network 10.10.150.0 255.255.255.0
+ default-router 10.10.150.1
+ dns-server 8.8.8.8
+
 interface g0/0/0
  ip address 10.10.1.6 255.255.255.252
  no shut
@@ -268,7 +376,6 @@ interface GigabitEthernet0/0/1.110
  standby 110 ip 172.16.110.1
  standby 110 priority 100
  standby 110 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 115 Personal AP
 interface GigabitEthernet0/0/1.115
@@ -277,7 +384,6 @@ interface GigabitEthernet0/0/1.115
  standby 115 ip 10.10.115.1
  standby 115 priority 100
  standby 115 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 120 Analys
 interface GigabitEthernet0/0/1.120
@@ -286,7 +392,6 @@ interface GigabitEthernet0/0/1.120
  standby 120 ip 172.16.120.1
  standby 120 priority 100
  standby 120 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 125 Analys AP
 interface GigabitEthernet0/0/1.125
@@ -295,7 +400,6 @@ interface GigabitEthernet0/0/1.125
  standby 125 ip 10.10.125.1
  standby 125 priority 100
  standby 125 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 135 Test AP
 interface GigabitEthernet0/0/1.135
@@ -304,7 +408,7 @@ interface GigabitEthernet0/0/1.135
  standby 135 ip 10.10.135.1
  standby 135 priority 100
  standby 135 preempt
- ip helper-address 10.10.140.41
+
 
 ! VLAN 140 Server
 interface GigabitEthernet0/0/1.140
@@ -321,7 +425,6 @@ interface GigabitEthernet0/0/1.150
  standby 150 ip 10.10.150.1
  standby 150 priority 100
  standby 150 preempt
- ip helper-address 10.10.140.41
 
 ! VLAN 155 Sensor data
 interface GigabitEthernet0/0/1.155
@@ -401,6 +504,7 @@ vlan 999
 interface Vlan199
  ip address 10.10.199.11 255.255.255.0
  no shut
+exit
 ip default-gateway 10.10.199.1
 
 ! STP root primary
@@ -503,6 +607,7 @@ vlan 999
 interface Vlan199
  ip address 10.10.199.12 255.255.255.0
  no shut
+exit
 ip default-gateway 10.10.199.1
 
 spanning-tree vlan 110,115,120,125,135,140,150,155,199 root secondary
@@ -610,6 +715,7 @@ vlan 999
 interface Vlan199
  ip address 10.10.199.13 255.255.255.0
  no shut
+exit
 ip default-gateway 10.10.199.1
 
 ! AP4 Sensor VLAN150
@@ -701,6 +807,7 @@ vlan 999
 interface Vlan199
  ip address 10.10.199.14 255.255.255.0
  no shut
+exit
 ip default-gateway 10.10.199.1
 
 ! Analys PC VLAN120
