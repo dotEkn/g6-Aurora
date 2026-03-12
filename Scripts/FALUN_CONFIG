@@ -3,6 +3,7 @@ conf t
 hostname R1
 no ip domain lookup
 ip domain name aurora.local
+ipv6 unicast-routing
 
 ip access-list standard FE-NAT
  permit 172.16.110.0 0.0.0.255
@@ -19,18 +20,24 @@ exit
 interface g0/0
  description WAN_TO_ISP
  ip address 203.0.113.10 255.255.255.252
+ ipv6 address autoconfig
+ ipv6 address FE80::1 link-local
  ip nat outside
  no shut
 
 interface g0/1
  desc TO_R2
  ip address 10.10.1.1 255.255.255.252
+ ipv6 address 2001:DB8:ABCD:1::1/64
+ ipv6 address FE80::1:1 link-local
  ip nat inside
  no shut
 
 interface g0/2
  desc TO_R3
  ip address 10.10.1.5 255.255.255.252
+ ipv6 address 2001:DB8:ABCD:2::1/64
+ ipv6 address FE80::1:2 link-local
  ip nat inside
  no shut
 
@@ -92,6 +99,7 @@ conf t
 hostname R2
 no ip domain lookup
 ip domain name aurora.local
+ipv6 unicast-routing
 
 ! Exkludera DHCP adresser
 ip dhcp excluded-address 172.16.110.1 172.16.110.50
@@ -151,6 +159,8 @@ ip dhcp pool VLAN150_SENSOR_AP
 
 interface g0/0/0
  ip address 10.10.1.2 255.255.255.252
+ ipv6 address 2001:DB8:ABCD:1::2/64
+ ipv6 address FE80::2:1 link-local
  no shut
 
 interface g0/0/1
@@ -169,7 +179,11 @@ interface GigabitEthernet0/0/1.105
 interface GigabitEthernet0/0/1.199
  encapsulation dot1Q 199
  ip address 10.10.199.2 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:199::2/64
+ ipv6 address FE80::2:199 link-local
  standby 199 ip 10.10.199.1
+ standby version 2
+ standby 199 ipv6 FE80::1
  standby 199 priority 110
  standby 199 preempt
 
@@ -177,7 +191,11 @@ interface GigabitEthernet0/0/1.199
 interface GigabitEthernet0/0/1.110
  encapsulation dot1Q 110
  ip address 172.16.110.2 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:110::2/64
+ ipv6 address FE80::2:110 link-local
  standby 110 ip 172.16.110.1
+ standby version 2
+ standby 110 ipv6 FE80::1
  standby 110 priority 110
  standby 110 preempt
 
@@ -185,7 +203,11 @@ interface GigabitEthernet0/0/1.110
 interface GigabitEthernet0/0/1.115
  encapsulation dot1Q 115
  ip address 10.10.115.2 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:115::2/64
+ ipv6 address FE80::2:115 link-local
  standby 115 ip 10.10.115.1
+ standby version 2
+ standby 115 ipv6 FE80::1
  standby 115 priority 110
  standby 115 preempt
 
@@ -193,7 +215,11 @@ interface GigabitEthernet0/0/1.115
 interface GigabitEthernet0/0/1.120
  encapsulation dot1Q 120
  ip address 172.16.120.2 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:120::2/64
+ ipv6 address FE80::2:120 link-local
  standby 120 ip 172.16.120.1
+ standby version 2
+ standby 120 ipv6 FE80::1
  standby 120 priority 110
  standby 120 preempt
 
@@ -201,7 +227,11 @@ interface GigabitEthernet0/0/1.120
 interface GigabitEthernet0/0/1.125
  encapsulation dot1Q 125
  ip address 10.10.125.2 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:125::2/64
+ ipv6 address FE80::2:125 link-local
  standby 125 ip 10.10.125.1
+ standby version 2
+ standby 125 ipv6 FE80::1
  standby 125 priority 110
  standby 125 preempt
 
@@ -210,7 +240,11 @@ interface GigabitEthernet0/0/1.125
 interface GigabitEthernet0/0/1.135
  encapsulation dot1Q 135
  ip address 10.10.135.2 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:135::2/64
+ ipv6 address FE80::2:135 link-local
  standby 135 ip 10.10.135.1
+ standby version 2
+ standby 135 ipv6 FE80::1
  standby 135 priority 110
  standby 135 preempt
 
@@ -218,7 +252,11 @@ interface GigabitEthernet0/0/1.135
 interface GigabitEthernet0/0/1.140
  encapsulation dot1Q 140
  ip address 10.10.140.2 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:140::2/64
+ ipv6 address FE80::2:140 link-local
  standby 140 ip 10.10.140.1
+ standby version 2
+ standby 140 ipv6 FE80::1
  standby 140 priority 110
  standby 140 preempt
 
@@ -226,7 +264,11 @@ interface GigabitEthernet0/0/1.140
 interface GigabitEthernet0/0/1.150
  encapsulation dot1Q 150
  ip address 10.10.150.2 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:150::2/64
+ ipv6 address FE80::2:150 link-local
  standby 150 ip 10.10.150.1
+ standby version 2
+ standby 150 ipv6 FE80::1
  standby 150 priority 110
  standby 150 preempt
 
@@ -234,7 +276,11 @@ interface GigabitEthernet0/0/1.150
 interface GigabitEthernet0/0/1.155
  encapsulation dot1Q 155
  ip address 10.10.155.2 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:155::2/64
+ ipv6 address FE80::2:155 link-local
  standby 155 ip 10.10.155.1
+ standby version 2
+ standby 155 ipv6 FE80::1
  standby 155 priority 110
  standby 155 preempt
  ip helper-address 10.10.140.41
@@ -287,6 +333,7 @@ conf t
 hostname R3
 no ip domain lookup
 ip domain name aurora.local
+ipv6 unicast-routing
 
 
 ! Exkludera DHCP adresser
@@ -347,6 +394,8 @@ ip dhcp pool VLAN150_SENSOR_AP
 
 interface g0/0/0
  ip address 10.10.1.6 255.255.255.252
+ ipv6 address 2001:DB8:ABCD:2::2/64
+ ipv6 address FE80::3:1 link-local
  no shut
 
 interface g0/0/1
@@ -365,7 +414,11 @@ interface GigabitEthernet0/0/1.105
 interface GigabitEthernet0/0/1.199
  encapsulation dot1Q 199
  ip address 10.10.199.3 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:199::3/64
+ ipv6 address FE80::3:199 link-local
  standby 199 ip 10.10.199.1
+ standby version 2
+ standby 199 ipv6 FE80::1
  standby 199 priority 100
  standby 199 preempt
 
@@ -373,7 +426,11 @@ interface GigabitEthernet0/0/1.199
 interface GigabitEthernet0/0/1.110
  encapsulation dot1Q 110
  ip address 172.16.110.3 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:110::3/64
+ ipv6 address FE80::3:110 link-local
  standby 110 ip 172.16.110.1
+ standby version 2
+ standby 110 ipv6 FE80::1
  standby 110 priority 100
  standby 110 preempt
 
@@ -381,7 +438,11 @@ interface GigabitEthernet0/0/1.110
 interface GigabitEthernet0/0/1.115
  encapsulation dot1Q 115
  ip address 10.10.115.3 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:115::3/64
+ ipv6 address FE80::3:115 link-local
  standby 115 ip 10.10.115.1
+ standby version 2
+ standby 115 ipv6 FE80::1
  standby 115 priority 100
  standby 115 preempt
 
@@ -389,7 +450,11 @@ interface GigabitEthernet0/0/1.115
 interface GigabitEthernet0/0/1.120
  encapsulation dot1Q 120
  ip address 172.16.120.3 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:120::3/64
+ ipv6 address FE80::3:120 link-local
  standby 120 ip 172.16.120.1
+ standby version 2
+ standby 120 ipv6 FE80::1
  standby 120 priority 100
  standby 120 preempt
 
@@ -397,7 +462,11 @@ interface GigabitEthernet0/0/1.120
 interface GigabitEthernet0/0/1.125
  encapsulation dot1Q 125
  ip address 10.10.125.3 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:125::3/64
+ ipv6 address FE80::3:125 link-local
  standby 125 ip 10.10.125.1
+ standby version 2
+ standby 125 ipv6 FE80::1
  standby 125 priority 100
  standby 125 preempt
 
@@ -405,16 +474,24 @@ interface GigabitEthernet0/0/1.125
 interface GigabitEthernet0/0/1.135
  encapsulation dot1Q 135
  ip address 10.10.135.3 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:135::3/64
+ ipv6 address FE80::3:135 link-local
  standby 135 ip 10.10.135.1
+ standby version 2
+ standby 135 ipv6 FE80::1
  standby 135 priority 100
  standby 135 preempt
 
 
 ! VLAN 140 Server
-interface GigabitEthernet0/0/1.140
+nterface GigabitEthernet0/0/1.140
  encapsulation dot1Q 140
  ip address 10.10.140.3 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:140::3/64
+ ipv6 address FE80::3:140 link-local
  standby 140 ip 10.10.140.1
+ standby version 2
+ standby 140 ipv6 FE80::1
  standby 140 priority 100
  standby 140 preempt
 
@@ -422,7 +499,11 @@ interface GigabitEthernet0/0/1.140
 interface GigabitEthernet0/0/1.150
  encapsulation dot1Q 150
  ip address 10.10.150.3 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:150::3/64
+ ipv6 address FE80::3:150 link-local
  standby 150 ip 10.10.150.1
+ standby version 2
+ standby 150 ipv6 FE80::1
  standby 150 priority 100
  standby 150 preempt
 
@@ -430,7 +511,11 @@ interface GigabitEthernet0/0/1.150
 interface GigabitEthernet0/0/1.155
  encapsulation dot1Q 155
  ip address 10.10.155.3 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:155::3/64
+ ipv6 address FE80::3:155 link-local
  standby 155 ip 10.10.155.1
+ standby version 2
+ standby 155 ipv6 FE80::1
  standby 155 priority 100
  standby 155 preempt
  ip helper-address 10.10.140.41
@@ -503,6 +588,8 @@ vlan 999
 
 interface Vlan199
  ip address 10.10.199.11 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:199::11/64
+ ipv6 address FE80::11 link-local
  no shut
 exit
 ip default-gateway 10.10.199.1
@@ -606,6 +693,8 @@ vlan 999
 
 interface Vlan199
  ip address 10.10.199.12 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:199::12/64
+ ipv6 address FE80::12 link-local
  no shut
 exit
 ip default-gateway 10.10.199.1
@@ -714,6 +803,8 @@ vlan 999
 
 interface Vlan199
  ip address 10.10.199.13 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:199::13/64
+ ipv6 address FE80::13 link-local
  no shut
 exit
 ip default-gateway 10.10.199.1
@@ -806,6 +897,8 @@ vlan 999
 
 interface Vlan199
  ip address 10.10.199.14 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:199::14/64
+ ipv6 address FE80::14 link-local
  no shut
 exit
 ip default-gateway 10.10.199.1
