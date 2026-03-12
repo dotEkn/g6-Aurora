@@ -193,11 +193,11 @@ interface GigabitEthernet0/0/1.20
 
 interface GigabitEthernet0/0/1.25
  encapsulation dot1Q 25
- ip address 172.16.25.2 255.255.255.0
+ ip address 10.10.25.2 255.255.255.0
  ipv6 address 2001:DB8:ABCD:25::2/64
  ipv6 address FE80::2F link-local
  standby version 2
- standby 25 ip 172.16.25.1
+ standby 25 ip 10.10.25.1
  standby 25 ipv6 FE80::1
  standby 25 priority 110
  standby 25 preempt
@@ -217,11 +217,11 @@ interface GigabitEthernet0/0/1.30
 
 interface GigabitEthernet0/0/1.35
  encapsulation dot1Q 35
- ip address 172.16.35.2 255.255.255.0
+ ip address 10.10.35.2 255.255.255.0
  ipv6 address 2001:DB8:ABCD:35::2/64
  ipv6 address FE80::211 link-local
  standby version 2
- standby 35 ip 172.16.35.1
+ standby 35 ip 10.10.35.1
  standby 35 ipv6 FE80::1
  standby 35 priority 110
  standby 35 preempt
@@ -363,11 +363,11 @@ interface GigabitEthernet0/0/1.20
 
 interface GigabitEthernet0/0/1.25
  encapsulation dot1Q 25
- ip address 172.16.25.3 255.255.255.0
+ ip address 10.10.25.3 255.255.255.0
  ipv6 address 2001:DB8:ABCD:25::3/64
  ipv6 address FE80::3F link-local
  standby version 2
- standby 25 ip 172.16.25.1
+ standby 25 ip 10.10.25.1
  standby 25 ipv6 FE80::1
  standby 25 priority 100
  standby 25 preempt
@@ -387,11 +387,11 @@ interface GigabitEthernet0/0/1.30
 
 interface GigabitEthernet0/0/1.35
  encapsulation dot1Q 35
- ip address 172.16.35.3 255.255.255.0
+ ip address 10.10.35.3 255.255.255.0
  ipv6 address 2001:DB8:ABCD:35::3/64
  ipv6 address FE80::311 link-local
  standby version 2
- standby 35 ip 172.16.35.1
+ standby 35 ip 10.10.35.1
  standby 35 ipv6 FE80::1
  standby 35 priority 100
  standby 35 preempt
