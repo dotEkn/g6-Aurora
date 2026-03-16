@@ -81,3 +81,45 @@ crypto map AURORAMAP 5 ipsec-isakmp
 interface GigabitEthernet0/0/0
  crypto map AURORAMAP
  exit
+
+
+
+
+
+
+
+
+
+enable
+conf t
+
+! 1. Ta bort den gamla NAT-kopplingen
+no ip nat inside source list 5 interface GigabitEthernet0/0/0 overload
+
+! 2. Skapa den nya, smarta NAT-listan
+ip access-list extended HK-NAT-EXT
+
+ ! --- STEG A: NAT-UNDANTAG FÖR VPN (Deny = Gör INGEN NAT) ---
+ ! Detta stoppar NAT från att stjäla trafik som går mellan Falun och Gävle
+ deny ip 10.10.0.0 0.0.255.255 10.10.0.0 0.0.255.255
+ deny ip 10.10.0.0 0.0.255.255 172.16.0.0 0.15.255.255
+ deny ip 172.16.0.0 0.15.255.255 10.10.0.0 0.0.255.255
+ deny ip 172.16.0.0 0.15.255.255 172.16.0.0 0.15.255.255
+
+ ! --- STEG B: TILLÅT NAT TILL INTERNET (Permit = Översätt till publik IP) ---
+ ! Här lägger vi in exakt samma nätverk som du hade i din gamla access-list 5
+ permit ip 10.10.5.0 0.0.0.255 any
+ permit ip 10.10.40.0 0.0.0.255 any
+ permit ip 10.10.99.0 0.0.0.255 any
+ permit ip 172.16.20.0 0.0.0.255 any
+ permit ip 172.16.25.0 0.0.0.255 any
+ permit ip 172.16.30.0 0.0.0.255 any
+ permit ip 172.16.35.0 0.0.0.255 any
+ exit
+
+! 3. Aktivera den nya NAT-regeln på ditt WAN-interface
+ip nat inside source list HK-NAT-EXT interface GigabitEthernet0/0/0 overload
+exit
+
+! 4. Rensa minnet från gamla, felaktiga NAT-översättningar (Superviktigt!)
+clear ip nat translation *
