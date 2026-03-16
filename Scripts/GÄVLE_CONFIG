@@ -449,6 +449,14 @@ vlan 99
 vlan 999
  name BLACKHOLE
 
+! DMZ on VLAN 5
+interface Vlan5
+ ip address 10.10.5.11 255.255.255.0
+ ipv6 address 2001:DB8:ABCD:5::11/64
+ ipv6 address FE80::11 link-local
+ no shut
+ ip default-gateway 10.10.5.1
+
 ! Management on VLAN 10
 interface Vlan10
  ip address 10.10.10.11 255.255.255.0
