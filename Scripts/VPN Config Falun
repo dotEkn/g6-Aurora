@@ -1,0 +1,11 @@
+enable
+conf t
+crypto isakmp policy 1
+encryption aes
+hash md5
+authentication pre-share
+group 5
+exit
+
+crypto isakmp key AURORAKEY address 203.0.113.2
+
