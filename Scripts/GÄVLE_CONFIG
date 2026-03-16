@@ -8,27 +8,77 @@ no ip domain lookup
 ip domain name aurora.local
 ipv6 unicast-routing
 
-ip access-list extended HK-EDGE-IN
-! --- Tillåt svarstrafik (stateful-liknande beteende) ---
-permit tcp any any established
-permit icmp any any echo-reply
-permit icmp any any time-exceeded
-permit icmp any any unreachable
-! --- Tillåt HTTP till DMZ (publik IP på R1) ---
-permit tcp any host 203.0.113.2 eq 80
-! --- Blockera Internet till interna privata nät ---
-deny ip any 10.10.0.0 0.0.255.255
-deny ip any 172.16.0.0 0.0.255.255
-! --- Blockera allt annat ---
-deny ip any any log
-exit
+! VPN 
+conf t
+
+! IPsec inställningar
+crypto isakmp policy 1
+ encryption aes
+ hash sha256
+ authentication pre-share
+ group 14
+ exit
+
+crypto isakmp key AURORAKEY address 203.0.113.10
+
+crypto ipsec transform-set IPCiscoSet esp-aes esp-sha256-hmac
+ exit
+
+! Komplett ACL: SPEGELVÄND! Från GÄVLE till FALUN
+ip access-list extended AURORAVPN
+ ! Gävle Mgmt (99, 10, 15) till Falun Mgmt (199, 105)
+ permit ip 10.10.99.0 0.0.0.255 10.10.199.0 0.0.0.255
+ permit ip 10.10.10.0 0.0.0.255 10.10.199.0 0.0.0.255
+ permit ip 10.10.15.0 0.0.0.255 10.10.199.0 0.0.0.255
+ permit ip 10.10.99.0 0.0.0.255 10.10.105.0 0.0.0.255
+ ! Gävle Server/DMZ (40, 5) till Falun Server (140)
+ permit ip 10.10.40.0 0.0.0.255 10.10.140.0 0.0.0.255
+ permit ip 10.10.5.0 0.0.0.255 10.10.140.0 0.0.0.255
+ ! Gävle Server (40) till Falun Personal/Analys (172.16.110, 172.16.120)
+ permit ip 10.10.40.0 0.0.0.255 172.16.110.0 0.0.0.255
+ permit ip 10.10.40.0 0.0.0.255 172.16.120.0 0.0.0.255
+ ! Gävle Kontor (172.16.30) till Falun Personal/Analys
+ permit ip 172.16.30.0 0.0.0.255 172.16.110.0 0.0.0.255
+ permit ip 172.16.30.0 0.0.0.255 172.16.120.0 0.0.0.255
+ ! R1-R2-R3 länknät från Gävle
+ permit ip 10.10.99.0 0.0.0.255 10.10.1.0 0.0.0.255
+ exit
+
+! Crypto map
+crypto map AURORAMAP 5 ipsec-isakmp
+ set peer 203.0.113.10
+ set transform-set IPCiscoSet
+ match address AURORAVPN
+ exit
+
+! NAT-listan
+ip access-list extended HK-NAT-EXT
+
+ ! --- NAT-UNDANTAG FÖR VPN (Deny = Gör INGEN NAT) ---
+ ! Detta stoppar NAT från att stjäla trafik som går mellan Falun och Gävle
+ deny ip 10.10.0.0 0.0.255.255 10.10.0.0 0.0.255.255
+ deny ip 10.10.0.0 0.0.255.255 172.16.0.0 0.15.255.255
+ deny ip 172.16.0.0 0.15.255.255 10.10.0.0 0.0.255.255
+ deny ip 172.16.0.0 0.15.255.255 172.16.0.0 0.15.255.255
+
+ ! --- TILLÅT NAT TILL INTERNET (Permit = Översätt till publik IP) ---
+ ! Här lägger vi in exakt samma nätverk som du hade i din gamla access-list 5
+ permit ip 10.10.5.0 0.0.0.255 any
+ permit ip 10.10.40.0 0.0.0.255 any
+ permit ip 10.10.99.0 0.0.0.255 any
+ permit ip 172.16.20.0 0.0.0.255 any
+ permit ip 172.16.25.0 0.0.0.255 any
+ permit ip 172.16.30.0 0.0.0.255 any
+ permit ip 172.16.35.0 0.0.0.255 any
+ exit
 
 ! WAN
 interface GigabitEthernet0/0/0
  description WAN_TO_ISP
  ip address 203.0.113.2 255.255.255.252
  ipv6 address autoconfig default
- ip access-group HK-EDGE-IN in
+ crypto map AURORAMAP
+ ip access-group HK-NAT-EXT in
  ip nat outside
  no shut
 
@@ -77,18 +127,6 @@ router ospf 5
  network 10.10.10.0 0.0.0.255 area 0
  network 10.10.99.0 0.0.0.255 area 0
  default-information originate
-
-! NAT för interna nät
-access-list 5 permit 10.10.5.0 0.0.0.255
-access-list 5 permit 10.10.40.0 0.0.0.255
-access-list 5 permit 10.10.99.0 0.0.0.255
-access-list 5 permit 172.16.20.0 0.0.0.255
-access-list 5 permit 172.16.25.0 0.0.0.255
-access-list 5 permit 172.16.30.0 0.0.0.255
-access-list 5 permit 172.16.35.0 0.0.0.255
-
-ip nat inside source list 5 interface GigabitEthernet0/0/0 overload
-ip nat inside source static tcp 10.10.5.10 80 interface GigabitEthernet0/0/0 80
 end
 
 ## R2
