@@ -177,7 +177,7 @@ interface GigabitEthernet0/0/1.105
 
 ! VLAN 199 SVI
 interface GigabitEthernet0/0/1.199
- encapsulation dot1Q 199
+ encapsulation dot1Q 199 native
  ip address 10.10.199.2 255.255.255.0
  ipv6 address 2001:DB8:ABCD:199::2/64
  ipv6 address FE80::2:199 link-local
@@ -412,7 +412,7 @@ interface GigabitEthernet0/0/1.105
 
 ! VLAN 199 SVI
 interface GigabitEthernet0/0/1.199
- encapsulation dot1Q 199
+ encapsulation dot1Q 199 native
  ip address 10.10.199.3 255.255.255.0
  ipv6 address 2001:DB8:ABCD:199::3/64
  ipv6 address FE80::3:199 link-local
