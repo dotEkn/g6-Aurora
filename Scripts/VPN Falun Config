@@ -1,0 +1,22 @@
+enable
+conf t
+crypto isakmp policy 1
+encryption aes
+hash md5
+authentication pre-share
+group 5
+exit
+
+crypto isakmp key AURORAKEY address 203.0.113.2
+
+crypto ipsec transform-set IPCiscoSet esp-aes md5-hmac
+exit
+ip access-list extended AURORAVPN
+permit ip 10.10.0.0 0.0.0.255 10.10.0.0 0.0.0.255
+permit ip 172.16.0.0 0.0.0.255 172.16.0.0 0.0.0.255
+exit
+
+cryptomap AURORAMAP 5 ipsec-isakmp
+set peer 203.0.113.2
+set transform-set IPCiscoSet
+match address AURORAVPN
