@@ -484,7 +484,7 @@ interface GigabitEthernet0/0/1.135
 
 
 ! VLAN 140 Server
-nterface GigabitEthernet0/0/1.140
+interface GigabitEthernet0/0/1.140
  encapsulation dot1Q 140
  ip address 10.10.140.3 255.255.255.0
  ipv6 address 2001:DB8:ABCD:140::3/64
