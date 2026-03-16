@@ -128,25 +128,19 @@ ip dhcp pool VLAN115_PERSONAL_AP
  dns-server 8.8.8.8
 
 ! DHCP pool för VLAN 120
-ip dhcp pool VLAN120_KONFERENS
+ip dhcp pool VLAN120_ANALYS
  network 172.16.120.0 255.255.255.0
  default-router 172.16.120.1
  dns-server 8.8.8.8
 
 ! DHCP pool för VLAN 125
-ip dhcp pool VLAN125_KONF_GAST
+ip dhcp pool VLAN125_ANALYS_AP
  network 10.10.125.0 255.255.255.0
  default-router 10.10.125.1
  dns-server 8.8.8.8
 
-! DHCP pool för VLAN 130
-ip dhcp pool VLAN130_KONTOR
- network 172.16.130.0 255.255.255.0
- default-router 172.16.130.1
- dns-server 8.8.8.8
-
 ! DHCP pool för VLAN 135
-ip dhcp pool VLAN135_KONTOR_AP
+ip dhcp pool VLAN135_TEST_AP
  network 10.10.135.0 255.255.255.0
  default-router 10.10.135.1
  dns-server 8.8.8.8
