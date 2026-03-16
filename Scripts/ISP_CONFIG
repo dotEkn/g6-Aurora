@@ -6,12 +6,14 @@ no ip domain-lookup
 interface GigabitEthernet0/0
  description TO_R1_HK
  ip address 203.0.113.1 255.255.255.252
+ ipv6 address 2001:db8:abcd:1::1/127
  no shut
 
 ! ===== Interface mot Falun =====
 interface GigabitEthernet0/1
  description TO_R1_FE
  ip address 203.0.113.9 255.255.255.252
+ ipv6 address 2001:db8:abcd:2::9/127
  no shut
 
 ! ===== Fake Internet LAN =====
@@ -30,6 +32,14 @@ ip route 10.10.10.0 255.255.255.0 203.0.113.2
 ip route 10.10.40.0 255.255.255.0 203.0.113.2
 ip route 10.10.99.0 255.255.255.0 203.0.113.2
 ip route 10.10.15.0 255.255.255.0 203.0.113.2
+ipv6 route 2001:db8:abcd:10::/64 2001:db8:abcd:1::0
+ipv6 route 2001:db8:abcd:15::/64 2001:db8:abcd:1::0
+ipv6 route 2001:db8:abcd:20::/64 2001:db8:abcd:1::0
+ipv6 route 2001:db8:abcd:25::/64 2001:db8:abcd:1::0
+ipv6 route 2001:db8:abcd:30::/64 2001:db8:abcd:1::0
+ipv6 route 2001:db8:abcd:35::/64 2001:db8:abcd:1::0
+ipv6 route 2001:db8:abcd:40::/64 2001:db8:abcd:1::0
+ipv6 route 2001:db8:abcd:99::/64 2001:db8:abcd:1::0
 
 ! Trafik mot Falun
 ip route 172.16.110.0 255.255.255.0 203.0.113.10
@@ -41,6 +51,16 @@ ip route 10.10.140.0 255.255.255.0 203.0.113.10
 ip route 10.10.150.0 255.255.255.0 203.0.113.10
 ip route 10.10.155.0 255.255.255.0 203.0.113.10
 ip route 10.10.199.0 255.255.255.0 203.0.113.10
+ipv6 route 2001:db8:abcd:20::/64 2001:db8:abcd:2::8
+ipv6 route 2001:db8:abcd:110::/64 2001:db8:abcd:2::8
+ipv6 route 2001:db8:abcd:115::/64 2001:db8:abcd:2::8
+ipv6 route 2001:db8:abcd:120::/64 2001:db8:abcd:2::8
+ipv6 route 2001:db8:abcd:125::/64 2001:db8:abcd:2::8
+ipv6 route 2001:db8:abcd:135::/64 2001:db8:abcd:2::8
+ipv6 route 2001:db8:abcd:140::/64 2001:db8:abcd:2::8
+ipv6 route 2001:db8:abcd:150::/64 2001:db8:abcd:2::8
+ipv6 route 2001:db8:abcd:155::/64 2001:db8:abcd:2::8
+ipv6 route 2001:db8:abcd:199::/64 2001:db8:abcd:2::8
 
 end
 wr
