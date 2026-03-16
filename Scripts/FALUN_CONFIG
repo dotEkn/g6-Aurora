@@ -20,7 +20,7 @@ exit
 interface g0/0
  description WAN_TO_ISP
  ip address 203.0.113.10 255.255.255.252
- ipv6 address autoconfig
+ ipv6 address 2001:db8:abcd:2::8/127
  ipv6 address FE80::1 link-local
  ip nat outside
  no shut
@@ -36,7 +36,7 @@ interface g0/1
 interface g0/2
  desc TO_R3
  ip address 10.10.1.5 255.255.255.252
- ipv6 address 2001:DB8:ABCD:2::1/64
+ ipv6 address 2001:DB8:ABCD:3::1/64
  ipv6 address FE80::1:2 link-local
  ip nat inside
  no shut
@@ -83,6 +83,7 @@ ip route 172.16.25.0 255.255.255.0 203.0.113.9
 ip route 172.16.30.0 255.255.255.0 203.0.113.9
 ip route 172.16.35.0 255.255.255.0 203.0.113.9
 
+ipv6 route ::/0 2001:db8:abcd:2::9
 
 router ospf 10
  router-id 1.1.1.1
@@ -92,6 +93,16 @@ router ospf 10
  network 10.10.1.0 0.0.0.3 area 0
  network 10.10.1.4 0.0.0.3 area 0
  default-information originate
+
+ipv6 router ospf 10
+ router-id 1.1.1.1
+ default-information originate
+exit
+
+ interface g0/1
+ ipv6 ospf 10 area 0
+ interface g0/2
+ ipv6 ospf 10 area 0
 
 ## R2 CORE
 
@@ -295,6 +306,34 @@ router ospf 10
  network 10.10.150.0 0.0.0.255 area 0
  network 10.10.155.0 0.0.0.255 area 0
 
+ipv6 router ospf 10
+ router-id 2.2.2.2
+ default-information originate
+ exit
+
+ipv6 route ::/0 2001:db8:abcd:1::1
+
+interface g0/0/0
+ ipv6 ospf 10 area 0
+ interface g0/0/1.199
+ ipv6 ospf 10 area 0
+ interface g0/0/1.110
+ ipv6 ospf 10 area 0
+ interface g0/0/1.115
+ ipv6 ospf 10 area 0
+ interface g0/0/1.120
+ ipv6 ospf 10 area 0
+ interface g0/0/1.125
+ ipv6 ospf 10 area 0
+ interface g0/0/1.135
+ ipv6 ospf 10 area 0
+ interface g0/0/1.140
+ ipv6 ospf 10 area 0
+ interface g0/0/1.150
+ ipv6 ospf 10 area 0
+ interface g0/0/1.155
+ ipv6 ospf 10 area 0
+
 
 ## ===== ACL SECTION =====
 
@@ -388,7 +427,7 @@ ip dhcp pool VLAN150_SENSOR_AP
 
 interface g0/0/0
  ip address 10.10.1.6 255.255.255.252
- ipv6 address 2001:DB8:ABCD:2::2/64
+ ipv6 address 2001:DB8:ABCD:3::2/64
  ipv6 address FE80::3:1 link-local
  no shut
 
@@ -529,6 +568,34 @@ router ospf 10
  network 10.10.140.0 0.0.0.255 area 0
  network 10.10.150.0 0.0.0.255 area 0
  network 10.10.155.0 0.0.0.255 area 0
+
+ipv6 route ::/0 2001:db8:abcd:3::1
+
+ipv6 router ospf 10
+ router-id 3.3.3.3
+ default-information originate
+ exit
+
+ interface g0/0/0
+ ipv6 ospf 10 area 0
+ interface g0/0/1.199
+ ipv6 ospf 10 area 0
+ interface g0/0/1.110
+ ipv6 ospf 10 area 0
+ interface g0/0/1.115
+ ipv6 ospf 10 area 0
+ interface g0/0/1.120
+ ipv6 ospf 10 area 0
+ interface g0/0/1.125
+ ipv6 ospf 10 area 0
+ interface g0/0/1.135
+ ipv6 ospf 10 area 0
+ interface g0/0/1.140
+ ipv6 ospf 10 area 0
+ interface g0/0/1.150
+ ipv6 ospf 10 area 0
+ interface g0/0/1.155
+ ipv6 ospf 10 area 0
 
 
 ## ===== ACL SECTION =====
