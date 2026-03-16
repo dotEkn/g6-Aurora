@@ -546,7 +546,7 @@ interface range Gi1/0/23-24
  switchport trunk allowed vlan 15,20,25,30,35,40,99
 
 ! Access SERVER_ROOM
-interface range Gi1/0/1-3
+interface range Gi1/0/1-4
  description SERVER_ROOM
  switchport mode access
  switchport access vlan 40
@@ -554,7 +554,7 @@ interface range Gi1/0/1-3
  spanning-tree bpduguard enable
 
 ! Portar till BLACKHOLE
-interface range G1/0/4-14,G1/0/16-20,G1/0/24-28
+interface range G1/0/5-14,G1/0/16-20,G1/0/24-28
  desc BLACKHOLE
  switchport mode access
  switchport access vlan 999
