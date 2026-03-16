@@ -13,7 +13,9 @@ crypto ipsec transform-set IPCiscoSet esp-aes esp-sha-hmac
 exit
 ip access-list extended AURORAVPN
 permit ip 10.10.0.0 0.0.0.255 10.10.0.0 0.0.0.255
+permit ip 10.10.0.0 0.0.0.255 172.16 0.0.0.255
 permit ip 172.16.0.0 0.0.0.255 172.16.0.0 0.0.0.255
+permit ip 172.16.0.0 0.0.0.255 10.10.0.0 0.0.0.255
 exit
 
 cryptomap AURORAMAP 5 ipsec-isakmp
