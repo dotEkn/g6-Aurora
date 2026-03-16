@@ -44,6 +44,21 @@ ip access-list extended AURORAVPN
  permit ip 10.10.99.0 0.0.0.255 10.10.1.0 0.0.0.255
  exit
 
+ip access-list extended HK-EDGE-IN
+! --- Tillåt svarstrafik (stateful-liknande beteende) ---
+permit tcp any any established
+permit icmp any any echo-reply
+permit icmp any any time-exceeded
+permit icmp any any unreachable
+! --- Tillåt HTTP till DMZ (publik IP på R1) ---
+permit tcp any host 203.0.113.2 eq 80
+! --- Blockera Internet till interna privata nät ---
+deny ip any 10.10.0.0 0.0.255.255
+deny ip any 172.16.0.0 0.0.255.255
+! --- Blockera allt annat ---
+deny ip any any log
+exit
+
 ! Crypto map
 crypto map AURORAMAP 5 ipsec-isakmp
  set peer 203.0.113.10
@@ -78,7 +93,7 @@ interface GigabitEthernet0/0/0
  ip address 203.0.113.2 255.255.255.252
  ipv6 address autoconfig default
  crypto map AURORAMAP
- ip access-group HK-NAT-EXT in
+ ip access-group HK-EDGE-IN in
  ip nat outside
  no shut
 
@@ -117,6 +132,11 @@ interface GigabitEthernet0/0/1.10
  ipv6 address 2001:DB8:ABCD:10::1/64
  ipv6 address FE80::1C link-local
  no shut
+
+! NAT-Funktionen
+no ip nat inside source list 5 interface GigabitEthernet0/0/0 overload
+ip nat inside source list HK-NAT-EXT interface GigabithEthernet0/0/0 overload
+
 
 ! OSPF mot interna routrar
 router ospf 5
