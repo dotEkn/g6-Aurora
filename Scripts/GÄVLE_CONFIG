@@ -135,7 +135,7 @@ interface GigabitEthernet0/0/1.10
 
 ! NAT-Funktionen
 no ip nat inside source list 5 interface GigabitEthernet0/0/0 overload
-ip nat inside source list HK-NAT-EXT interface GigabithEthernet0/0/0 overload
+ip nat inside source list HK-NAT-EXT interface GigabitEthernet0/0/0 overload
 
 
 ! OSPF mot interna routrar
