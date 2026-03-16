@@ -605,7 +605,7 @@ interface Gi1/0/15
  switchport trunk allowed vlan 105,110,115,120,125,135,140,150,155,199
 
 ! Servers VLAN 140
-interface Gi1/0/1-3
+interface range Gi1/0/1-3
  description SERVERS_VLAN140
  switchport mode access
  switchport access vlan 140
