@@ -9,7 +9,7 @@ exit
 
 crypto isakmp key AURORAKEY address 203.0.113.2
 
-crypto ipsec transform-set IPCiscoSet esp-aes sha-hmac
+crypto ipsec transform-set IPCiscoSet esp-aes esp-sha-hmac
 exit
 ip access-list extended AURORAVPN
 permit ip 10.10.0.0 0.0.0.255 10.10.0.0 0.0.0.255
