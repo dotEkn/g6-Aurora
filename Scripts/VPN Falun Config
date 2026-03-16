@@ -22,3 +22,65 @@ cryptomap AURORAMAP 5 ipsec-isakmp
 set peer 203.0.113.2
 set transform-set IPCiscoSet
 match address AURORAVPN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+conf t
+
+! 1. IPsec inställningar
+crypto isakmp policy 1
+ encryption aes
+ hash sha256
+ authentication pre-share
+ group 14
+ exit
+
+crypto isakmp key AURORAKEY address 203.0.113.2
+
+crypto ipsec transform-set IPCiscoSet esp-aes esp-sha256-hmac
+ exit
+
+! 2. Rensa gammal ACL
+no ip access-list extended AURORAVPN
+
+! 3. Komplett ACL: Från FALUN till GÄVLE
+ip access-list extended AURORAVPN
+ ! Falun Mgmt (199, 105) till Gävle Mgmt (99, 10, 15)
+ permit ip 10.10.199.0 0.0.0.255 10.10.99.0 0.0.0.255
+ permit ip 10.10.199.0 0.0.0.255 10.10.10.0 0.0.0.255
+ permit ip 10.10.199.0 0.0.0.255 10.10.15.0 0.0.0.255
+ permit ip 10.10.105.0 0.0.0.255 10.10.99.0 0.0.0.255
+ ! Falun Server (140) till Gävle Server/DMZ (40, 5)
+ permit ip 10.10.140.0 0.0.0.255 10.10.40.0 0.0.0.255
+ permit ip 10.10.140.0 0.0.0.255 10.10.5.0 0.0.0.255
+ ! Falun Personal/Analys (172.16.110, 172.16.120) till Gävle Server (40)
+ permit ip 172.16.110.0 0.0.0.255 10.10.40.0 0.0.0.255
+ permit ip 172.16.120.0 0.0.0.255 10.10.40.0 0.0.0.255
+ ! Falun Personal/Analys till Gävle Kontor (172.16.30)
+ permit ip 172.16.110.0 0.0.0.255 172.16.30.0 0.0.0.255
+ permit ip 172.16.120.0 0.0.0.255 172.16.30.0 0.0.0.255
+ ! R1-R2-R3 länknät till Gävle
+ permit ip 10.10.1.0 0.0.0.255 10.10.99.0 0.0.0.255
+ exit
+
+! 4. Applicera Crypto map
+crypto map AURORAMAP 5 ipsec-isakmp
+ set peer 203.0.113.2
+ set transform-set IPCiscoSet
+ match address AURORAVPN
+ exit
+
+interface GigabitEthernet0/0
+ crypto map AURORAMAP
+ exit
