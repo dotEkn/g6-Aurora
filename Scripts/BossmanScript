@@ -32,3 +32,23 @@ exit
 
 ! 5. Rensa minnet från gamla kopplingar så den fattar bytet direkt
 clear ip nat translation *
+
+
+
+
+
+conf t
+
+! 1. Gå in i Gävles brandvägg
+ip access-list extended HK-EDGE-IN
+
+ ! 2. Tillåt port 500 (ISAKMP), port 4500 (NAT-T) och ESP-protokollet
+ 5 permit udp host 203.0.113.10 host 203.0.113.2 eq isakmp
+ 6 permit udp host 203.0.113.10 host 203.0.113.2 eq 4500
+ 7 permit esp host 203.0.113.10 host 203.0.113.2
+ exit
+
+! 3. Rensa låsta anslutningar
+clear crypto isakmp
+clear crypto sa
+exit
