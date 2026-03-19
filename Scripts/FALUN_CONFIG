@@ -27,6 +27,7 @@ ip access-list extended AURORAVPN
  ! Falun Server (140) till Gävle Server/DMZ (40, 5)
  permit ip 10.10.140.0 0.0.0.255 10.10.40.0 0.0.0.255
  permit ip 10.10.140.0 0.0.0.255 10.10.5.0 0.0.0.255
+ permit ip 10.10.140.0 0.0.0.255 172.16.30.0 0.0.0.255
  ! Falun Personal/Analys (172.16.110, 172.16.120) till Gävle Server (40)
  permit ip 172.16.110.0 0.0.0.255 10.10.40.0 0.0.0.255
  permit ip 172.16.120.0 0.0.0.255 10.10.40.0 0.0.0.255
