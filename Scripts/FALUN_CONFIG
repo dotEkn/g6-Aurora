@@ -858,6 +858,12 @@ vlan 199
 vlan 999
  name SVARTHÅL
 
+! Global DHCP snooping inställningar
+ip dhcp snooping
+ip dhcp snooping vlan 110,115,120,125
+no ip dhcp snooping information option
+ip arp inspection vlan 110,115,120,125
+
 interface Vlan199
  ip address 10.10.199.12 255.255.255.0
  ipv6 address 2001:DB8:ABCD:199::12/64
@@ -874,6 +880,9 @@ interface Gi1/0/15
  switchport mode trunk
  switchport trunk native vlan 199
  switchport trunk allowed vlan 105,110,115,120,125,135,140,150,155,199
+ip dhcp snooping trust
+ ip arp inspection trust
+exit
 
 ! Personal PC VLAN110
 interface range Gi1/0/1-14
@@ -911,6 +920,9 @@ interface Port-channel1
  switchport mode trunk
  switchport trunk native vlan 199
  switchport trunk allowed vlan 105,110,115,120,125,135,140,150,155,199
+ip dhcp snooping trust
+ ip arp inspection trust
+exit
 
 ! ===== Po24 till SW4 (Gi1/0/21-22) =====
 interface range Gi1/0/21-22
@@ -918,7 +930,10 @@ interface range Gi1/0/21-22
  switchport mode trunk
  switchport trunk native vlan 199
  switchport trunk allowed vlan 105,110,115,120,125,135,140,150,155,199
+ip dhcp snooping trust
+ ip arp inspection trust
  channel-group 3 mode active
+exit
 
 interface Port-channel3
  description PO24_TO_SW4
