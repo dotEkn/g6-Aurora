@@ -1,0 +1,34 @@
+conf t
+
+! 1. Ta bort aktiveringen av den gamla NAT-listan (Viktigast!)
+no ip nat inside source list FE-NAT interface g0/0 overload
+
+! 2. Radera den gamla listan helt och hållet
+no ip access-list standard FE-NAT
+
+! 3. Skapa den nya, utökade listan med VPN-undantagen
+ip access-list extended FE-NAT-EXT
+ ! --- Stoppa NAT för intern trafik (VPN) ---
+ deny ip 10.10.0.0 0.0.255.255 10.10.0.0 0.0.255.255
+ deny ip 10.10.0.0 0.0.255.255 172.16.0.0 0.15.255.255
+ deny ip 172.16.0.0 0.15.255.255 10.10.0.0 0.0.255.255
+ deny ip 172.16.0.0 0.15.255.255 172.16.0.0 0.15.255.255
+ ! --- Tillåt NAT till Internet för alla VLAN ---
+ permit ip 172.16.110.0 0.0.0.255 any
+ permit ip 172.16.120.0 0.0.0.255 any
+ permit ip 10.10.115.0 0.0.0.255 any
+ permit ip 10.10.125.0 0.0.0.255 any
+ permit ip 10.10.135.0 0.0.0.255 any
+ permit ip 10.10.140.0 0.0.0.255 any
+ permit ip 10.10.150.0 0.0.0.255 any
+ permit ip 10.10.155.0 0.0.0.255 any
+ permit ip 10.10.199.0 0.0.0.255 any
+ permit ip 10.10.1.0 0.0.0.255 any
+ exit
+
+! 4. Aktivera den nya listan på ditt WAN-interface
+ip nat inside source list FE-NAT-EXT interface g0/0 overload
+exit
+
+! 5. Rensa minnet från gamla kopplingar så den fattar bytet direkt
+clear ip nat translation *
