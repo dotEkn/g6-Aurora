@@ -5,23 +5,87 @@ no ip domain lookup
 ip domain name aurora.local
 ipv6 unicast-routing
 
-ip access-list standard FE-NAT
- permit 172.16.110.0 0.0.0.255
- permit 172.16.120.0 0.0.0.255
- permit 10.10.115.0 0.0.0.255
- permit 10.10.125.0 0.0.0.255
- permit 10.10.135.0 0.0.0.255
- permit 10.10.140.0 0.0.0.255
- permit 10.10.150.0 0.0.0.255
- permit 10.10.155.0 0.0.0.255
- permit 10.10.199.0 0.0.0.255
-exit
+! IPSEC VPN (KRYPTERING & REGLER)
+crypto isakmp policy 1
+ encryption aes
+ hash sha256
+ authentication pre-share
+ group 14
+ exit
+
+crypto isakmp key AURORAKEY address 203.0.113.2
+crypto ipsec transform-set IPCiscoSet esp-aes esp-sha256-hmac
+ exit
+
+!  ACL VPN: Från FALUN till GÄVLE
+ip access-list extended AURORAVPN
+ ! Falun Mgmt (199, 105) till Gävle Mgmt (99, 10, 15)
+ permit ip 10.10.199.0 0.0.0.255 10.10.99.0 0.0.0.255
+ permit ip 10.10.199.0 0.0.0.255 10.10.10.0 0.0.0.255
+ permit ip 10.10.199.0 0.0.0.255 10.10.15.0 0.0.0.255
+ permit ip 10.10.105.0 0.0.0.255 10.10.99.0 0.0.0.255
+ ! Falun Server (140) till Gävle Server/DMZ (40, 5)
+ permit ip 10.10.140.0 0.0.0.255 10.10.40.0 0.0.0.255
+ permit ip 10.10.140.0 0.0.0.255 10.10.5.0 0.0.0.255
+ ! Falun Personal/Analys (172.16.110, 172.16.120) till Gävle Server (40)
+ permit ip 172.16.110.0 0.0.0.255 10.10.40.0 0.0.0.255
+ permit ip 172.16.120.0 0.0.0.255 10.10.40.0 0.0.0.255
+ ! Falun Personal/Analys till Gävle Kontor (172.16.30)
+ permit ip 172.16.110.0 0.0.0.255 172.16.30.0 0.0.0.255
+ permit ip 172.16.120.0 0.0.0.255 172.16.30.0 0.0.0.255
+ ! R1-R2-R3 länknät till Gävle
+ permit ip 10.10.1.0 0.0.0.255 10.10.99.0 0.0.0.255
+ exit
+
+crypto map AURORAMAP 5 ipsec-isakmp
+ set peer 203.0.113.2
+ set transform-set IPCiscoSet
+ match address AURORAVPN
+ exit
+
+! BRANDVÄGG & NAT-LISTOR
+ip access-list extended FE-NAT-EXT
+ ! --- NAT-UNDANTAG FÖR VPN (Deny = Gör INGEN NAT) ---
+ deny ip 10.10.0.0 0.0.255.255 10.10.0.0 0.0.255.255
+ deny ip 10.10.0.0 0.0.255.255 172.16.0.0 0.15.255.255
+ deny ip 172.16.0.0 0.15.255.255 10.10.0.0 0.0.255.255
+ deny ip 172.16.0.0 0.15.255.255 172.16.0.0 0.15.255.255
+ ! --- TILLÅT NAT TILL INTERNET ---
+ permit ip 172.16.110.0 0.0.0.255 any
+ permit ip 172.16.120.0 0.0.0.255 any
+ permit ip 10.10.115.0 0.0.0.255 any
+ permit ip 10.10.125.0 0.0.0.255 any
+ permit ip 10.10.135.0 0.0.0.255 any
+ permit ip 10.10.140.0 0.0.0.255 any
+ permit ip 10.10.150.0 0.0.0.255 any
+ permit ip 10.10.155.0 0.0.0.255 any
+ permit ip 10.10.199.0 0.0.0.255 any
+ permit ip 10.10.1.0 0.0.0.255 any
+ exit
+
+! 2. Brandväggen mot Internet
+ip access-list extended HK-EDGE-IN
+ ! Tillåt VPN-tunneln från Falun
+ permit udp host 203.0.113.10 host 203.0.113.2 eq isakmp
+ permit esp host 203.0.113.10 host 203.0.113.2
+ ! Tillåt normal internet-svarstrafik och webb till DMZ
+ permit tcp any any established
+ permit icmp any any echo-reply
+ permit icmp any any time-exceeded
+ permit icmp any any unreachable
+ permit tcp any host 203.0.113.2 eq 80
+ ! Blockera fultrafik
+ deny ip any 10.10.0.0 0.0.255.255
+ deny ip any 172.16.0.0 0.0.255.255
+ deny ip any any log
+ exit
 
 interface g0/0
  description WAN_TO_ISP
  ip address 203.0.113.10 255.255.255.252
  ipv6 address 2001:db8:abcd:2::8/127
  ipv6 address FE80::1 link-local
+ crypto map AURORAMAP
  ip nat outside
  no shut
 
@@ -42,7 +106,8 @@ interface g0/2
  no shut
 
 ip route 0.0.0.0 0.0.0.0 203.0.113.9
-ip nat inside source list FE-NAT interface G0/0 overload
+no ip nat inside source list FE-NAT interface G0/0 overload
+ip nat inside source list FE-NAT-EXT interface G0/0 overload
 
 ## ===== ACL SECTION =====
 
