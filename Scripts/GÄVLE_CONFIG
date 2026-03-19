@@ -12,6 +12,7 @@ ipv6 unicast-routing
 zone security INSIDE
 zone security OUTSIDE
 zone security DMZ
+ exit
 
 ! VPN 
 conf t
@@ -86,6 +87,7 @@ class-map type inspect match-any CM-OUTSIDE-DMZ
 
 class-map type inspect match-any CM-VPN
  match access-group name AURORAVPN
+exit
 
 ! ZPF POLICY MAPS
 policy-map type inspect PM-INSIDE-OUT
@@ -101,6 +103,7 @@ policy-map type inspect PM-OUTSIDE-DMZ
   inspect
  class class-default
   drop
+ exit
 
 ! ZPF ZONE PAIRS
 zone-pair security ZP-INSIDE-OUT source INSIDE destination OUTSIDE
@@ -108,6 +111,7 @@ zone-pair security ZP-INSIDE-OUT source INSIDE destination OUTSIDE
 
 zone-pair security ZP-OUTSIDE-DMZ source OUTSIDE destination DMZ
  service-policy type inspect PM-OUTSIDE-DMZ
+ exit
 
 ! NAT-listan
 ip access-list extended HK-NAT-EXT
