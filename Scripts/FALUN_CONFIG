@@ -958,7 +958,7 @@ ip default-gateway 10.10.199.1
 interface Gi1/0/15
  description AP4_SENSOR
  switchport mode access
- switchport access vlan 150
+ switchport access vlan 155
  spanning-tree portfast
  spanning-tree bpduguard enable
 
