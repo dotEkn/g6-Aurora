@@ -413,11 +413,11 @@ exit
 ! ACL för att isolera IoT-sensorerna
 ip access-list extended IOT-RESTRICT
  ! tillåter trafik VLAN 155 till Backend-Servern
- permit ip host 10.10.155.21 0.0.0.255 host 10.10.140.40
- permit ip host 10.10.155.22 0.0.0.255 host 10.10.140.40
- permit ip host 10.10.155.23 0.0.0.255 host 10.10.140.40
- permit ip host 10.10.155.24 0.0.0.255 host 10.10.140.40
- ! blockerar all annam trafik och loggar försöken
+ permit ip host 10.10.155.21 host 10.10.140.40
+ permit ip host 10.10.155.22 host 10.10.140.40
+ permit ip host 10.10.155.23 host 10.10.140.40
+ permit ip host 10.10.155.24 host 10.10.140.40
+ ! blockerar all annam trafik och loggar forsoken
  deny ip any any log
 exit
 
@@ -687,10 +687,10 @@ exit
 ! ACL för att isolera IoT-sensorerna
 ip access-list extended IOT-RESTRICT
  ! tillåter trafik VLAN 155 till Backend-Servern
- permit ip host 10.10.155.21 0.0.0.255 host 10.10.140.40
- permit ip host 10.10.155.22 0.0.0.255 host 10.10.140.40
- permit ip host 10.10.155.23 0.0.0.255 host 10.10.140.40
- permit ip host 10.10.155.24 0.0.0.255 host 10.10.140.40
+ permit ip host 10.10.155.21 host 10.10.140.40
+ permit ip host 10.10.155.22 host 10.10.140.40
+ permit ip host 10.10.155.23 host 10.10.140.40
+ permit ip host 10.10.155.24 host 10.10.140.40
  ! blockerar all annam trafik och loggar försöken
  deny ip any any log
 exit
