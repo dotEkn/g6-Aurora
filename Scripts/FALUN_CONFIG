@@ -739,9 +739,9 @@ vlan 999
 
 ! Global DHCP snooping inställningar
 ip dhcp snooping
-ip dhcp snooping vlan 110,115,120,125,135,140,150,155,199
+ip dhcp snooping vlan 110,115,120,125
 no ip dhcp snooping information option
-ip arp inspection vlan 110,115,120,125,135,140,150,155,199
+ip arp inspection vlan 110,115,120,125
 
 interface Vlan199
  ip address 10.10.199.11 255.255.255.0
