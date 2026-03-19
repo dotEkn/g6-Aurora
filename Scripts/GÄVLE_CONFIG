@@ -8,6 +8,11 @@ no ip domain lookup
 ip domain name aurora.local
 ipv6 unicast-routing
 
+! ZPF
+zone security INSIDE
+zone security OUTSIDE
+zone security DMZ
+
 ! VPN 
 conf t
 
@@ -45,20 +50,20 @@ ip access-list extended AURORAVPN
  permit ip 10.10.99.0 0.0.0.255 10.10.1.0 0.0.0.255
  exit
 
-ip access-list extended HK-EDGE-IN
+! ip access-list extended HK-EDGE-IN
 ! --- Tillåt svarstrafik (stateful-liknande beteende) ---
-permit tcp any any established
-permit icmp any any echo-reply
-permit icmp any any time-exceeded
-permit icmp any any unreachable
+! permit tcp any any established
+! permit icmp any any echo-reply
+! permit icmp any any time-exceeded
+! permit icmp any any unreachable
 ! --- Tillåt HTTP till DMZ (publik IP på R1) ---
-permit tcp any host 203.0.113.2 eq 80
+! permit tcp any host 203.0.113.2 eq 80
 ! --- Blockera Internet till interna privata nät ---
-deny ip any 10.10.0.0 0.0.255.255
-deny ip any 172.16.0.0 0.0.255.255
+! deny ip any 10.10.0.0 0.0.255.255
+! deny ip any 172.16.0.0 0.0.255.255
 ! --- Blockera allt annat ---
-deny ip any any log
-exit
+! deny ip any any log
+! exit
 
 ! Crypto map
 crypto map AURORAMAP 5 ipsec-isakmp
@@ -66,6 +71,43 @@ crypto map AURORAMAP 5 ipsec-isakmp
  set transform-set IPCiscoSet
  match address AURORAVPN
  exit
+
+! ZPF CLASS MAPS
+class-map type inspect match-any CM-INSIDE-OUT
+ match protocol http
+ match protocol https
+ match protocol dns
+ match protocol icmp
+ match protocol isakmp
+ match protocol ipsec
+
+class-map type inspect match-any CM-OUTSIDE-DMZ
+ match protocol http
+
+class-map type inspect match-any CM-VPN
+ match access-group name AURORAVPN
+
+! ZPF POLICY MAPS
+policy-map type inspect PM-INSIDE-OUT
+ class CM-INSIDE-OUT
+  inspect
+ class class-default
+  drop
+
+policy-map type inspect PM-OUTSIDE-DMZ
+ class CM-VPN
+  inspect
+ class CM-OUTSIDE-DMZ
+  inspect
+ class class-default
+  drop
+
+! ZPF ZONE PAIRS
+zone-pair security ZP-INSIDE-OUT source INSIDE destination OUTSIDE
+ service-policy type inspect PM-INSIDE-OUT
+
+zone-pair security ZP-OUTSIDE-DMZ source OUTSIDE destination DMZ
+ service-policy type inspect PM-OUTSIDE-DMZ
 
 ! NAT-listan
 ip access-list extended HK-NAT-EXT
@@ -95,9 +137,12 @@ interface GigabitEthernet0/0/0
  ipv6 address 2001:db8:abcd:1::0/127
  ipv6 address FE80::1 link-local
  crypto map AURORAMAP
- ip access-group HK-EDGE-IN in
+ ! ip access-group HK-EDGE-IN in
  ip nat outside
  no shut
+
+! ZPF
+ zone-member security OUTSIDE
 
 ! --- IP Routes ---
 ip route 0.0.0.0 0.0.0.0 203.0.113.1
@@ -115,6 +160,9 @@ interface GigabitEthernet0/0/1
  ip nat inside
  no shut
 
+! ZPF
+ zone-member security INSIDE
+
 ! DMZ VLAN 5
 interface GigabitEthernet0/0/1.5
  description DMZ_VLAN5
@@ -126,6 +174,9 @@ interface GigabitEthernet0/0/1.5
  ip nat inside
  no shut
 
+! ZPF
+ zone-member security DMZ
+
 ! MANAGEMENT_TRANSIT VLAN 10
 interface GigabitEthernet0/0/1.10
  description MANAGEMENT_TRANSIT_VLAN10
@@ -135,10 +186,12 @@ interface GigabitEthernet0/0/1.10
  ipv6 address FE80::1C link-local
  no shut
 
+! ZPF
+ zone-member security INSIDE
+
 ! NAT-Funktionen
 no ip nat inside source list 5 interface GigabitEthernet0/0/0 overload
 ip nat inside source list HK-NAT-EXT interface GigabitEthernet0/0/0 overload
-
 
 ! OSPF mot interna routrar
 router ospf 5
