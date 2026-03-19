@@ -355,6 +355,7 @@ interface GigabitEthernet0/0/1.155
  standby 155 priority 110
  standby 155 preempt
  ip helper-address 10.10.140.41
+ ip access-group IOT-RESTRICT in
 
 router ospf 10
  router-id 2.2.2.2
@@ -407,6 +408,14 @@ interface g0/0/0
 ip access-list standard NTP-MGMT
  permit 10.10.199.0 0.0.0.255
  deny any
+exit
+
+! ACL för att isolera IoT-sensorerna
+ip access-list extended IOT-RESTRICT
+ ! tillåter trafik VLAN 155 till Backend-Servern
+ permit ip 10.10.155.0 0.0.0.255 host 10.10.140.40
+ ! blockerar all annam trafik och loggar försöken
+ deny ip any any log
 exit
 
 
@@ -618,6 +627,7 @@ interface GigabitEthernet0/0/1.155
  standby 155 priority 100
  standby 155 preempt
  ip helper-address 10.10.140.41
+ ip access-group IOT-RESTRICT in
 
 router ospf 10
  router-id 3.3.3.3
@@ -669,6 +679,14 @@ ipv6 router ospf 10
 ip access-list standard NTP-MGMT
  permit 10.10.199.0 0.0.0.255
  deny any
+exit
+
+! ACL för att isolera IoT-sensorerna
+ip access-list extended IOT-RESTRICT
+ ! tillåter trafik VLAN 155 till Backend-Servern
+ permit ip 10.10.155.0 0.0.0.255 host 10.10.140.40
+ ! blockerar all annam trafik och loggar försöken
+ deny ip any any log
 exit
 
 
