@@ -37,6 +37,7 @@ ip access-list extended AURORAVPN
  ! Gävle Server (40) till Falun Personal/Analys (172.16.110, 172.16.120)
  permit ip 10.10.40.0 0.0.0.255 172.16.110.0 0.0.0.255
  permit ip 10.10.40.0 0.0.0.255 172.16.120.0 0.0.0.255
+ permit ip 172.16.30.0 0.0.0.255 10.10.140.0 0.0.0.255
  ! Gävle Kontor (172.16.30) till Falun Personal/Analys
  permit ip 172.16.30.0 0.0.0.255 172.16.110.0 0.0.0.255
  permit ip 172.16.30.0 0.0.0.255 172.16.120.0 0.0.0.255
@@ -91,7 +92,8 @@ ip access-list extended HK-NAT-EXT
 interface GigabitEthernet0/0/0
  description WAN_TO_ISP
  ip address 203.0.113.2 255.255.255.252
- ipv6 address autoconfig default
+ ipv6 address 2001:db8:abcd:1::0/127
+ ipv6 address FE80::1 link-local
  crypto map AURORAMAP
  ip access-group HK-EDGE-IN in
  ip nat outside
