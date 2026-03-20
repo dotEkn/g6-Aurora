@@ -1,0 +1,76 @@
+## 📡 Simple FTP Server (Python)
+
+This script sets up a basic FTP server using `pyftpdlib`.
+
+### 🔧 Requirements
+
+Install the required library:
+
+```bash
+pip install pyftpdlib
+```
+
+### 🚀 Usage
+
+Run the script:
+
+```bash
+python ftp_server.py
+```
+
+### 👤 Login Credentials
+
+* **Username:** aurora
+* **Password:** cisco
+
+### 📁 Shared Directory
+
+```
+C:/Users/Student/Documents/ftp-share
+```
+
+### 🧠 Script
+
+```python
+from pyftpdlib.authorizers import DummyAuthorizer
+from pyftpdlib.servers import FTPServer
+from pyftpdlib.handlers import FTPHandler
+
+authorizer = DummyAuthorizer()
+
+# Enable anonymous login (optional)
+# authorizer.add_anonymous("C:/Users/Student/Documents/ftp-share", perm="elradfmw")
+
+# Add a user with full permissions
+authorizer.add_user("aurora", "cisco", "C:/Users/Student/Documents/ftp-share", perm="elradfmw")
+
+handler = FTPHandler
+handler.authorizer = authorizer
+
+# Start FTP server on all interfaces, port 21
+server = FTPServer(("0.0.0.0", 21), handler)
+
+try:
+    server.serve_forever()
+except KeyboardInterrupt:
+    print("FTP server stopped!")
+```
+
+### 🔐 Permissions Explained
+
+| Code | Meaning            |
+| ---- | ------------------ |
+| e    | Change directory   |
+| l    | List files         |
+| r    | Retrieve files     |
+| a    | Append files       |
+| d    | Delete files       |
+| f    | Rename files       |
+| m    | Create directories |
+| w    | Store/upload files |
+
+### ⚠️ Notes
+
+* Running on port **21** may require administrator privileges.
+* Make sure your firewall allows incoming connections.
+* For production use, consider adding TLS/SSL for security.
