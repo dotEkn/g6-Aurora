@@ -1,10 +1,10 @@
-# Docker WordPress + Python FTP + Syslog Logging Lab
+# Docker WordPress + Backup + Syslog Logging Lab
 
 This guide shows how to set up a **containerized environment** where:
 
 * WordPress runs in its own container
-* A Python FTP server runs in its own container
-* A Syslog server collects logs from both containers
+* A backup service automatically archives WordPress data
+* A Syslog server collects logs from all containers
 
 Everything runs using **Docker Compose**.
 
@@ -14,7 +14,7 @@ Everything runs using **Docker Compose**.
 
 Install Docker and Docker Compose.
 
-### Ubuntu / Debian
+## Ubuntu / Debian
 
 ```bash
 sudo apt update
@@ -39,68 +39,67 @@ docker compose version
 
 # 2. Create Project Folder
 
-Create a working directory.
-
 ```bash
-mkdir gävle-internal-stack
-cd gävle-internal-stack
+mkdir gavle-internal-stack
+cd gavle-internal-stack
 ```
 
-Create directories for the containers:
+Create directories:
 
 ```bash
-mkdir ftp
+mkdir backup
 mkdir syslog
 ```
 
-Your structure should look like:
+Project structure:
 
 ```
-gävle-internal-stack
+gavle-internal-stack
 │
 ├── docker-compose.yml
-├── ftp
-│   └── Dockerfile
+├── backup
+│   └── backup.sh
 └── syslog
     └── rsyslog.conf
 ```
 
 ---
 
-# 3. Create the FTP Container
+# 3. Create the Backup Service
 
-Create the Dockerfile:
+Create backup script:
 
 ```bash
-nano ftp/Dockerfile
+nano backup/backup.sh
 ```
 
 Paste:
 
-```dockerfile
-FROM python:3.11
+```bash
+#!/bin/sh
 
-RUN pip install pyftpdlib
+echo "Starting backup loop..."
 
-WORKDIR /ftp
+while true; do
+    echo "Running backup at $(date)"
 
-RUN mkdir data
+    tar -czf /backup/wordpress-backup-$(date +%Y%m%d%H%M%S).tar.gz /var/www/html
 
-CMD python -m pyftpdlib -i 0.0.0.0 -p 2121 -d /ftp/data -w
+    echo "Backup completed"
+
+    sleep 300
+done
 ```
 
-This container:
+Make it executable:
 
-* installs `pyftpdlib`
-* runs an FTP server
-* listens on port **2121**
-* stores files in `/ftp/data`
+```bash
+chmod +x backup/backup.sh
+```
 
 ---
 
-# 4. Create the Syslog Configuration
-
-Create the configuration file:
+# 4. Create Syslog Configuration
 
 ```bash
 nano syslog/rsyslog.conf
@@ -118,17 +117,9 @@ input(type="imtcp" port="514")
 *.* /var/log/remote.log
 ```
 
-This config:
-
-* enables UDP syslog
-* enables TCP syslog
-* stores all logs in `/var/log/remote.log`
-
 ---
 
 # 5. Create docker-compose.yml
-
-Create the compose file:
 
 ```bash
 nano docker-compose.yml
@@ -150,76 +141,63 @@ services:
     volumes:
       - ./syslog/rsyslog.conf:/etc/rsyslog.conf
 
-  ftp:
-    build: ./ftp
-    container_name: ftpserver
-    ports:
-      - "2121:2121"
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "udp://syslog:514"
-        tag: "ftp"
-
   wordpress:
     image: wordpress:latest
     container_name: wordpress
     ports:
       - "8080:80"
+    volumes:
+      - wordpress_data:/var/www/html
     logging:
       driver: syslog
       options:
         syslog-address: "udp://syslog:514"
         tag: "wordpress"
+
+  backup:
+    image: alpine:latest
+    container_name: backup
+    volumes:
+      - wordpress_data:/var/www/html:ro
+      - ./backup:/backup
+    entrypoint: ["/bin/sh", "/backup/backup.sh"]
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://syslog:514"
+        tag: "backup"
+
+volumes:
+  wordpress_data:
 ```
-
-This configuration runs:
-
-* syslog server
-* FTP server
-* WordPress server
-
-All logs are forwarded to the syslog container.
 
 ---
 
 # 6. Start the Stack
 
-Run:
-
 ```bash
 docker compose up -d
 ```
-
-Docker will:
-
-* build the FTP container
-* download WordPress
-* start the syslog server
 
 ---
 
 # 7. Verify Containers
 
-Check running containers:
-
 ```bash
 docker ps
 ```
 
-You should see:
+Expected:
 
 ```
 syslog
-ftpserver
 wordpress
+backup
 ```
 
 ---
 
-# 8. Access the Services
-
-### WordPress
+# 8. Access WordPress
 
 Open in browser:
 
@@ -227,52 +205,51 @@ Open in browser:
 http://localhost:8080
 ```
 
-Follow the WordPress installation wizard.
+Complete the installation wizard.
 
 ---
 
-### FTP Server
+# 9. Verify Backups
 
-Connect using an FTP client.
-
-Example:
-
-```
-Host: localhost
-Port: 2121
-```
-
----
-
-# 9. View Syslog Logs
-
-Enter the syslog container:
+Check backup files:
 
 ```bash
-docker exec -it syslog sh
+ls backup/
 ```
 
-View logs:
+Or inside container:
 
 ```bash
-tail -f /var/log/remote.log
+docker exec -it backup sh
+ls /backup
 ```
 
 Example output:
 
 ```
-wordpress: GET /index.php
-wordpress: PHP warning
-
-ftp: connection from 172.18.0.3
-ftp: upload test.txt
+wordpress-backup-20260320120000.tar.gz
 ```
 
 ---
 
-# 10. Stop the Environment
+# 10. View Syslog Logs
 
-Stop containers:
+```bash
+docker exec -it syslog sh
+tail -f /var/log/remote.log
+```
+
+Example:
+
+```
+wordpress: GET /index.php
+backup: Running backup at ...
+backup: Backup completed
+```
+
+---
+
+# 11. Stop the Environment
 
 ```bash
 docker compose down
@@ -280,9 +257,7 @@ docker compose down
 
 ---
 
-# 11. Restart Later
-
-Start again with:
+# 12. Restart Later
 
 ```bash
 docker compose up -d
@@ -290,40 +265,48 @@ docker compose up -d
 
 ---
 
-# 12. Useful Debug Commands
+# 🛠️ 13. Useful Debug Commands
 
-View container logs:
-
-```
-docker logs ftpserver
+```bash
 docker logs wordpress
+docker logs backup
 docker logs syslog
-```
 
-View all containers:
-
-```
 docker ps -a
-```
 
-Rebuild containers:
-
-```
 docker compose up --build
 ```
 
 ---
 
-# 13. Possible Improvements
+# 14. Possible Improvements
 
-We can extend this setup with:
+You can extend this setup with:
 
-* a **MariaDB container** for WordPress persistence
-* **phpMyAdmin** for database administration
-* **Graylog or ELK** for searchable logs
-* **Grafana dashboards**
-* **reverse proxy with HTTPS**
+* MariaDB container (WordPress database persistence)
+* Automated database backups (mysqldump)
+* Restic for encrypted, deduplicated backups
+* Reverse proxy (NGINX) with HTTPS
+* Grafana + Loki for advanced logging
+* Cloud backup (S3 / Backblaze)
 
-This turns the environment into a full **logging and monitoring lab**.
+---
+
+# Summary
+
+This lab provides:
+
+* WordPress container
+* Automated backup service
+* Centralized syslog logging
+* Simple and extensible Docker setup
+
+---
+
+## Notes
+
+* Backups run every 5 minutes
+* Data is stored locally in the `backup/` directory
+* Only WordPress files are backed up (not database)
 
 ---
