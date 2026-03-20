@@ -164,10 +164,11 @@ ip access-list extended HK-NAT-EXT
  ! --- TILLÅT NAT TILL INTERNET (Permit = Översätt till publik IP) ---
  ! Här lägger vi in exakt samma nätverk som du hade i din gamla access-list 5
  permit ip 10.10.5.0 0.0.0.255 any
+ permit ip 10.10.25.0 0.0.0.255 any
  permit ip 10.10.40.0 0.0.0.255 any
  permit ip 10.10.99.0 0.0.0.255 any
  permit ip 172.16.20.0 0.0.0.255 any
- permit ip 172.16.25.0 0.0.0.255 any
+
  permit ip 172.16.30.0 0.0.0.255 any
  permit ip 172.16.35.0 0.0.0.255 any
  exit
