@@ -99,7 +99,7 @@ class-map type inspect match-any CM-INSIDE-OUT
  match protocol isakmp
  match protocol ipsec
 
-class-map type inspect CM-INSIDE-DMZ
+class-map type inspect match-any CM-INSIDE-DMZ
  match protocol ftp
  match protocol icmp
 
