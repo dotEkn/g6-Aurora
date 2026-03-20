@@ -27,8 +27,8 @@ crypto isakmp policy 1
 ! Lokala användare
 ! username NAdmin privilege 15 secret 111
 ! username SAdmin privilege 7 secret 222
-! aaa authentication login defualt local
-! aaa authorization exec defualt local
+! aaa authentication login default local
+! aaa authorization exec default local
 
 
 crypto isakmp key AURORAKEY address 203.0.113.2
@@ -55,7 +55,7 @@ ip access-list extended AURORAVPN
  permit ip 172.16.110.0 0.0.0.255 10.10.5.0 0.0.0.255
  permit ip 172.16.120.0 0.0.0.255 10.10.5.0 0.0.0.255 
  ! R1-R2-R3 länknät till Gävle
- permit ip 10.10.1.0 0.0.0.255 10.10.99.0 0.0.0.255
+ permit ip 10.10.100.0 0.0.0.255 10.10.99.0 0.0.0.255
  exit
 
 crypto map AURORAMAP 5 ipsec-isakmp
@@ -78,7 +78,7 @@ ip access-list extended FE-NAT-EXT
  permit ip 10.10.125.0 0.0.0.255 any
  permit ip 10.10.140.0 0.0.0.255 any
  permit ip 10.10.199.0 0.0.0.255 any
- permit ip 10.10.1.0 0.0.0.255 any
+ permit ip 10.10.100.0 0.0.0.255 any
  exit
 
 ! 2. Brandväggen mot Internet
@@ -209,8 +209,8 @@ ipv6 unicast-routing
 ! Lokala användare
 ! username NAdmin privilege 15 secret 111
 ! username SAdmin privilege 7 secret 222
-! aaa authentication login defualt local
-! aaa authorization exec defualt local
+! aaa authentication login default local
+! aaa authorization exec default local
 
 ! ACL för att isolera IoT-sensorerna
 ip access-list extended IOT-RESTRICT
@@ -505,8 +505,8 @@ ipv6 unicast-routing
 ! Lokala användare
 ! username NAdmin privilege 15 secret 111
 ! username SAdmin privilege 7 secret 222
-! aaa authentication login defualt local
-! aaa authorization exec defualt local
+! aaa authentication login default local
+! aaa authorization exec default local
 
 ! ACL för att isolera IoT-sensorerna
 ip access-list extended IOT-RESTRICT
@@ -802,8 +802,8 @@ spanning-tree mode rapid-pvst
 ! Lokala användare
 ! username NAdmin privilege 15 secret 111
 ! username SAdmin privilege 7 secret 222
-! aaa authentication login defualt local
-! aaa authorization exec defualt local
+! aaa authentication login default local
+! aaa authorization exec default local
 
 vlan 105
  name Management
@@ -940,8 +940,8 @@ spanning-tree mode rapid-pvst
 ! Lokala användare
 ! username NAdmin privilege 15 secret 111
 ! username SAdmin privilege 7 secret 222
-! aaa authentication login defualt local
-! aaa authorization exec defualt local
+! aaa authentication login default local
+! aaa authorization exec default local
 
 vlan 105
  name Management
@@ -1082,8 +1082,8 @@ spanning-tree mode rapid-pvst
 ! Lokala användare
 ! username NAdmin privilege 15 secret 111
 ! username SAdmin privilege 7 secret 222
-! aaa authentication login defualt local
-! aaa authorization exec defualt local
+! aaa authentication login default local
+! aaa authorization exec default local
 
 vlan 105
  name Management
@@ -1195,8 +1195,8 @@ spanning-tree mode rapid-pvst
 ! Lokala användare
 ! username NAdmin privilege 15 secret 111
 ! username SAdmin privilege 7 secret 222
-! aaa authentication login defualt local
-! aaa authorization exec defualt local
+! aaa authentication login default local
+! aaa authorization exec default local
 
 vlan 110 
  name PERSONAL 
