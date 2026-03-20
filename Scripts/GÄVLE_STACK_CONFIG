@@ -58,9 +58,9 @@ This setup can run fully offline, but **requires internet ONCE**.
 
 # 3. Prepare Images for Offline Use
 
-Run on a machine **with internet**.
+Run on a machine **with internet access**.
 
-## Pull images
+## Pull all required images
 
 ```bash
 docker pull wordpress:6.4
@@ -69,7 +69,11 @@ docker pull rsyslog/syslog_appliance_alpine
 docker pull alpine:3.19
 ```
 
-## Save images
+---
+
+## Save images to files
+
+### Option A — Individual files
 
 ```bash
 docker save wordpress:6.4 -o wordpress.tar
@@ -78,19 +82,40 @@ docker save rsyslog/syslog_appliance_alpine -o syslog.tar
 docker save alpine:3.19 -o alpine.tar
 ```
 
-## Transfer to offline host
+### Option B — Single bundle (recommended)
 
-Copy `.tar` files via USB/SCP.
+```bash
+docker save \
+  wordpress:6.4 \
+  mariadb:10.6 \
+  rsyslog/syslog_appliance_alpine \
+  alpine:3.19 \
+  -o stack.tar
+```
+
+---
+
+## Transfer files
+
+Copy `.tar` file(s) to your intranet machine (USB, SCP, etc.)
 
 ---
 
 # 4. Load Images on Offline Host
+
+### If using individual files
 
 ```bash
 docker load -i wordpress.tar
 docker load -i mariadb.tar
 docker load -i syslog.tar
 docker load -i alpine.tar
+```
+
+### If using bundled file
+
+```bash
+docker load -i stack.tar
 ```
 
 ---
@@ -102,6 +127,8 @@ mkdir gavle-internal-stack
 cd gavle-internal-stack
 ```
 
+Create directories:
+
 ```bash
 mkdir backup
 mkdir syslog
@@ -109,11 +136,13 @@ mkdir syslog
 
 ---
 
-# 6. Backup Script
+# 6. Create Backup Script
 
 ```bash
 nano backup/backup.sh
 ```
+
+Paste:
 
 ```bash
 #!/bin/sh
@@ -131,17 +160,21 @@ while true; do
 done
 ```
 
+Make executable:
+
 ```bash
 chmod +x backup/backup.sh
 ```
 
 ---
 
-# 7. Syslog Config
+# 7. Create Syslog Configuration
 
 ```bash
 nano syslog/rsyslog.conf
 ```
+
+Paste:
 
 ```
 module(load="imudp")
@@ -155,11 +188,13 @@ input(type="imtcp" port="514")
 
 ---
 
-# 8. docker-compose.yml
+# 8. Create docker-compose.yml
 
 ```bash
 nano docker-compose.yml
 ```
+
+Paste:
 
 ```yaml
 version: "3.8"
@@ -231,7 +266,7 @@ volumes:
 
 ---
 
-# 9. Start (Offline Safe)
+# 9. Start the Stack (Offline Safe)
 
 ```bash
 docker compose up -d --pull never
@@ -239,7 +274,7 @@ docker compose up -d --pull never
 
 ---
 
-# 10. Verify
+# 10. Verify Containers
 
 ```bash
 docker ps
@@ -257,6 +292,8 @@ backup
 ---
 
 # 11. Access WordPress
+
+Open in browser:
 
 ```
 http://localhost:8080
@@ -289,11 +326,33 @@ docker compose down
 
 ---
 
+# 15. Debug Commands
+
+```bash
+docker logs wordpress
+docker logs mariadb
+docker logs backup
+docker logs syslog
+
+docker ps -a
+```
+
+---
+
+# Offline Best Practices
+
+* Always pin image versions (avoid `latest`)
+* Use `--pull never`
+* Store `.tar` images securely
+* Consider a local Docker registry for larger environments
+
+---
+
 # Important Notes
 
-* Backups currently include **files only**
+* Backups currently include **WordPress files only**
 * Database is **NOT backed up yet**
-* Use simple credentials for lab only
+* Credentials are for lab use only
 
 ---
 
@@ -302,16 +361,18 @@ docker compose down
 * Add database backups (`mysqldump`)
 * Add restore procedures
 * Use `.env` for secrets
-* Add reverse proxy + HTTPS
-* Use Restic for real backups
+* Add reverse proxy (NGINX + HTTPS)
+* Add monitoring (Grafana / Loki)
 
 ---
 
 # Summary
 
+This lab provides:
+
 * WordPress + MariaDB
 * Automated file backups
 * Centralized syslog logging
-* Fully offline-capable setup
+* Fully intranet-compatible deployment
 
 ---
