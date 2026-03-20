@@ -130,12 +130,16 @@ class-map type inspect match-any CM-GUEST-SUBNET
 policy-map type inspect PM-INSIDE-OUT
  class CM-INSIDE-OUT
   inspect
+ class type inspect CM-GUEST-SUBNET
+  inspect
  class class-default
   drop
 
 policy-map type inspect PM-INSIDE-DMZ
  class type inspect CM-INSIDE-DMZ
   inspect
+ class type inspect CM-GUEST-SUBNET
+  drop
  class class-default
   drop
 
@@ -148,7 +152,7 @@ policy-map type inspect PM-OUTSIDE-DMZ
   drop
 
 policy-map type inspect PM-GUEST-OUT
- class type inspect CM-GUEST-INTERNET
+ class type inspect CM-GUEST-SUBNET
   inspect
  class class-default
   drop
