@@ -155,7 +155,7 @@ router ospf 10
  no passive-interface g0/2
  network 10.10.1.0 0.0.0.3 area 0
  network 10.10.1.4 0.0.0.3 area 0
- default-information originate
+ default-information originate always
 
 ipv6 router ospf 10
  router-id 1.1.1.1
