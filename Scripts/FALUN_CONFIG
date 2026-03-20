@@ -445,6 +445,16 @@ no ip domain lookup
 ip domain name aurora.local
 ipv6 unicast-routing
 
+! ACL för att isolera IoT-sensorerna
+ip access-list extended IOT-RESTRICT
+ ! tillåter trafik VLAN 155 till Backend-Servern
+ permit ip host 10.10.155.21 host 10.10.140.40
+ permit ip host 10.10.155.22 host 10.10.140.40
+ permit ip host 10.10.155.23 host 10.10.140.40
+ permit ip host 10.10.155.24 host 10.10.140.40
+ ! blockerar all annam trafik och loggar försöken
+ deny ip any any log
+exit
 
 ! Exkludera DHCP adresser
 ip dhcp excluded-address 172.16.110.1 172.16.110.50
@@ -683,16 +693,6 @@ ip access-list standard NTP-MGMT
  deny any
 exit
 
-! ACL för att isolera IoT-sensorerna
-ip access-list extended IOT-RESTRICT
- ! tillåter trafik VLAN 155 till Backend-Servern
- permit ip host 10.10.155.21 host 10.10.140.40
- permit ip host 10.10.155.22 host 10.10.140.40
- permit ip host 10.10.155.23 host 10.10.140.40
- permit ip host 10.10.155.24 host 10.10.140.40
- ! blockerar all annam trafik och loggar försöken
- deny ip any any log
-exit
 
 
 ## ===== NTP SETTINGS =====
