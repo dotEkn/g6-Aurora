@@ -29,6 +29,7 @@ ipv6 unicast-routing
 zone security INSIDE
 zone security OUTSIDE
 zone security DMZ
+zone security GUEST
  exit
 
 ! VPN 
@@ -85,6 +86,11 @@ ip access-list extended HK-EDGE-IN
  deny ip any 172.16.0.0 0.15.255.255
 exit
 
+! ZPF Guest
+ip access-list extended ACL-GUEST
+ permit ip 10.10.25.0 0.0.0.255 any
+exit
+
 ! Crypto map
 crypto map AURORAMAP 5 ipsec-isakmp
  set peer 203.0.113.10
@@ -112,6 +118,14 @@ class-map type inspect match-any CM-VPN
  match access-group name AURORAVPN
 exit
 
+class-map type inspect match-any CM-GUEST-INTERNET
+ match protocol tcp
+ match protocol udp
+ match protocol icmp
+
+class-map type inspect match-any CM-GUEST-SUBNET
+ match access-group name ACL-GUEST
+
 ! ZPF POLICY MAPS
 policy-map type inspect PM-INSIDE-OUT
  class CM-INSIDE-OUT
@@ -132,6 +146,16 @@ policy-map type inspect PM-OUTSIDE-DMZ
   inspect
  class class-default
   drop
+
+policy-map type inspect PM-GUEST-OUT
+ class type inspect CM-GUEST-INTERNET
+  inspect
+ class class-default
+  drop
+
+policy-map type inspect PM-GUEST-BLOCK
+ class class-default
+  drop
  exit
 
 ! ZPF ZONE PAIRS
@@ -143,6 +167,15 @@ zone-pair security ZP-INSIDE-DMZ source INSIDE destination DMZ
 
 zone-pair security ZP-OUTSIDE-DMZ source OUTSIDE destination DMZ
  service-policy type inspect PM-OUTSIDE-DMZ
+
+zone-pair security ZP-GUEST-OUT source GUEST destination OUTSIDE
+ service-policy type inspect PM-GUEST-OUT
+
+zone-pair security ZP-GUEST-INSIDE source GUEST destination INSIDE
+ service-policy type inspect PM-GUEST-BLOCK
+
+zone-pair security ZP-GUEST-DMZ source GUEST destination DMZ
+ service-policy type inspect PM-GUEST-BLOCK
  exit
 
 ! NAT-listan
