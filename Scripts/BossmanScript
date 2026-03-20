@@ -52,3 +52,20 @@ ip access-list extended HK-EDGE-IN
 clear crypto isakmp
 clear crypto sa
 exit
+
+
+conf t
+
+! 1. Gå in i din befintliga Access-lista
+ip access-list extended HK-EDGE-IN
+
+! 2. Ta bort de gamla (felvända) reglerna
+no permit udp host 203.0.113.10 host 203.0.113.2 eq isakmp
+no permit esp host 203.0.113.10 host 203.0.113.2
+
+! 3. Lägg till de nya (rätta) reglerna: Från Gävle (.2) Till Falun (.10)
+permit udp host 203.0.113.2 host 203.0.113.10 eq isakmp
+permit esp host 203.0.113.2 host 203.0.113.10
+
+exit
+wr
