@@ -66,22 +66,24 @@ ip access-list extended AURORAVPN
  permit ip 172.16.30.0 0.0.0.255 172.16.120.0 0.0.0.255
  ! R1-R2-R3 länknät från Gävle
  permit ip 10.10.99.0 0.0.0.255 10.10.1.0 0.0.0.255
+ ! Tillåt Gävle DMZ (5) att prata med Falun Personal/Analys (110, 120)
+ permit ip 10.10.5.0 0.0.0.255 172.16.110.0 0.0.0.255
+ permit ip 10.10.5.0 0.0.0.255 172.16.120.0 0.0.0.255
  exit
 
-! ip access-list extended HK-EDGE-IN
-! --- Tillåt svarstrafik (stateful-liknande beteende) ---
-! permit tcp any any established
-! permit icmp any any echo-reply
-! permit icmp any any time-exceeded
-! permit icmp any any unreachable
-! --- Tillåt HTTP till DMZ (publik IP på R1) ---
-! permit tcp any host 203.0.113.2 eq 80
-! --- Blockera Internet till interna privata nät ---
-! deny ip any 10.10.0.0 0.0.255.255
-! deny ip any 172.16.0.0 0.0.255.255
-! --- Blockera allt annat ---
-! deny ip any any log
-! exit
+ip access-list extended HK-EDGE-IN
+ ! Tillåt VPN från Falun
+ permit udp host 203.0.113.10 host 203.0.113.2 eq isakmp
+ permit esp host 203.0.113.10 host 203.0.113.2
+ ! Tillåt normal internet-svarstrafik
+ permit tcp any any established
+ permit icmp any any echo-reply
+ permit icmp any any time-exceeded
+ permit icmp any any unreachable
+ ! Blockera fultrafik utifrån
+ deny ip any 10.0.0.0 0.255.255.255
+ deny ip any 172.16.0.0 0.15.255.255
+exit
 
 ! Crypto map
 crypto map AURORAMAP 5 ipsec-isakmp
@@ -171,7 +173,7 @@ interface GigabitEthernet0/0/0
  ipv6 address 2001:db8:abcd:1::0/127
  ipv6 address FE80::1 link-local
  crypto map AURORAMAP
- ! ip access-group HK-EDGE-IN in
+ ip access-group HK-EDGE-IN in
  ip nat outside
  no shut
 
