@@ -65,7 +65,7 @@ ip access-list extended AURORAVPN
  permit ip 172.16.30.0 0.0.0.255 172.16.110.0 0.0.0.255
  permit ip 172.16.30.0 0.0.0.255 172.16.120.0 0.0.0.255
  ! R1-R2-R3 länknät från Gävle
- permit ip 10.10.99.0 0.0.0.255 10.10.1.0 0.0.0.255
+ permit ip 10.10.99.0 0.0.0.255 10.10.100.0 0.0.0.255
  ! Tillåt Gävle DMZ (5) att prata med Falun Personal/Analys (110, 120)
  permit ip 10.10.5.0 0.0.0.255 172.16.110.0 0.0.0.255
  permit ip 10.10.5.0 0.0.0.255 172.16.120.0 0.0.0.255
