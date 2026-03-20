@@ -186,6 +186,17 @@ ip access-list extended IOT-RESTRICT
  deny ip any any log
 exit
 
+ip access-list extended ISOLERA-VLAN125
+! Håller Router uppdaterat så den ej blockerar vid senare tillfälle.
+ permit udp any any eq bootps
+! Blockerar att nå interna addressrymder
+ deny ip any 10.0.0.0 0.255.255.255
+ deny ip any 172.16.0.0 0.15.255.255
+ deny ip any 192.168.0.0 0.0.255.255
+! Ska tillåta annan trafik ut mot internet
+ permit ip any any
+exit
+
 ! Exkludera DHCP adresser
 ip dhcp excluded-address 172.16.110.1 172.16.110.50
 ip dhcp excluded-address 172.16.110.201 172.16.110.254
@@ -305,6 +316,7 @@ interface GigabitEthernet0/0/1.120
 ! VLAN 125 Analys AP
 interface GigabitEthernet0/0/1.125
  encapsulation dot1Q 125
+ ip access-group ISOLERA-VLAN125 in
  ip address 10.10.125.2 255.255.255.0
  ipv6 address 2001:DB8:ABCD:125::2/64
  ipv6 address FE80::2:125 link-local
@@ -453,6 +465,17 @@ ip access-list extended IOT-RESTRICT
  deny ip any any log
 exit
 
+ip access-list extended ISOLERA-VLAN125
+! Håller Router uppdaterat så den ej blockerar vid senare tillfälle.
+ permit udp any any eq bootps
+! Blockerar att nå interna addressrymder
+ deny ip any 10.0.0.0 0.255.255.255
+ deny ip any 172.16.0.0 0.15.255.255
+ deny ip any 192.168.0.0 0.0.255.255
+! Ska tillåta annan trafik ut mot internet
+ permit ip any any
+exit
+
 ! Exkludera DHCP adresser
 ip dhcp excluded-address 172.16.110.1 172.16.110.50
 ip dhcp excluded-address 172.16.110.201 172.16.110.254
@@ -578,6 +601,7 @@ interface GigabitEthernet0/0/1.120
 ! VLAN 125 Analys AP
 interface GigabitEthernet0/0/1.125
  encapsulation dot1Q 125
+ ip access-group ISOLERA-VLAN125 in
  ip address 10.10.125.3 255.255.255.0
  ipv6 address 2001:DB8:ABCD:125::3/64
  ipv6 address FE80::3:125 link-local
