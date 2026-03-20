@@ -9,7 +9,7 @@ ip domain name aurora.local
 ipv6 unicast-routing
 
 ! SSH konfigurering
-! ip domain-name aurora-local
+! ip domain name aurora-local
 ! crypto key generate rsa modulus 2048
 ! ip ssh version 2
 ! line vty 0 4
@@ -271,7 +271,7 @@ ip domain name aurora.local
 ipv6 unicast-routing
 
 ! SSH konfigurering
-! ip domain-name aurora-local
+! ip domain name aurora-local
 ! crypto key generate rsa modulus 2048
 ! ip ssh version 2
 ! line vty 0 4
@@ -450,7 +450,7 @@ ip domain name aurora.local
 ipv6 unicast-routing
 
 ! SSH konfigurering
-! ip domain-name aurora-local
+! ip domain name aurora-local
 ! crypto key generate rsa modulus 2048
 ! ip ssh version 2
 ! line vty 0 4
