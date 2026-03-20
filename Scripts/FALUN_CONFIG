@@ -84,8 +84,8 @@ ip access-list extended FE-NAT-EXT
 ! 2. Brandväggen mot Internet
 ip access-list extended HK-EDGE-IN
  ! Tillåt VPN-tunneln från Falun
- permit udp host 203.0.113.2 host 203.0.113.10 eq isakmp
- permit esp host 203.0.113.2 host 203.0.113.10
+ permit udp host 203.0.113.10 host 203.0.113.2 eq isakmp
+ permit esp host 203.0.113.10 host 203.0.113.2
  ! Tillåt normal internet-svarstrafik och webb till DMZ
  permit tcp any any established
  permit icmp any any echo-reply
