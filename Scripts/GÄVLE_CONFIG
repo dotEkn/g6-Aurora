@@ -74,8 +74,8 @@ ip access-list extended AURORAVPN
 
 ip access-list extended HK-EDGE-IN
  ! Tillåt VPN från Falun
- permit udp host 203.0.113.10 host 203.0.113.2 eq isakmp
- permit esp host 203.0.113.10 host 203.0.113.2
+ permit udp host 203.0.113.2 host 203.0.113.10 eq isakmp
+ permit esp host 203.0.113.2 host 203.0.113.10
  ! Tillåt normal internet-svarstrafik
  permit tcp any any established
  permit icmp any any echo-reply
