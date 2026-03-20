@@ -173,8 +173,8 @@ router ospf 10
  passive-interface default
  no passive-interface g0/1
  no passive-interface g0/2
- network 10.10.1.0 0.0.0.3 area 0
- network 10.10.1.4 0.0.0.3 area 0
+ network 10.10.100.0 0.0.0.3 area 0
+ network 10.10.100.4 0.0.0.3 area 0
  default-information originate always
 
 ipv6 router ospf 10
@@ -419,7 +419,7 @@ router ospf 10
  passive-interface default
  no passive-interface GigabitEthernet0/0/0
  no passive-interface GigabitEthernet0/0/1
- network 10.10.1.0 0.0.0.3 area 0
+ network 10.10.100.0 0.0.0.3 area 0
  network 10.10.199.0 0.0.0.255 area 0
  network 172.16.110.0 0.0.0.255 area 0
  network 172.16.120.0 0.0.0.255 area 0
@@ -432,7 +432,7 @@ router ospf 10
 
 ipv6 router ospf 10
  router-id 2.2.2.2
- default-information originate
+ default-information originate always
  exit
 
 ipv6 route ::/0 2001:db8:abcd:1::1
@@ -721,7 +721,7 @@ router ospf 10
  passive-interface default
  no passive-interface GigabitEthernet0/0/0
  no passive-interface GigabitEthernet0/0/1
- network 10.10.1.4 0.0.0.3 area 0
+ network 10.10.100.4 0.0.0.3 area 0
  network 10.10.199.0 0.0.0.255 area 0
  network 172.16.110.0 0.0.0.255 area 0
  network 172.16.120.0 0.0.0.255 area 0
