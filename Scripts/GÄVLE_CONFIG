@@ -114,6 +114,8 @@ class-map type inspect match-any CM-INSIDE-DMZ
 
 class-map type inspect match-any CM-OUTSIDE-DMZ
  match protocol http
+ match protocol icmp
+ match protocol ftp
 
 class-map type inspect match-any CM-VPN-SELF
  match protocol isakmp
