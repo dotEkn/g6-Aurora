@@ -1,4 +1,4 @@
-# Docker WordPress + Backup + Syslog Logging Lab
+# Docker WordPress + Backup + Syslog Logging Lab (Intranet-Ready)
 
 This guide shows how to set up a **containerized environment** where:
 
@@ -6,7 +6,7 @@ This guide shows how to set up a **containerized environment** where:
 * A backup service automatically archives WordPress data
 * A Syslog server collects logs from all containers
 
-Everything runs using **Docker Compose**.
+Designed to run **fully offline (intranet / air-gapped environment)** after initial setup.
 
 ---
 
@@ -37,7 +37,61 @@ docker compose version
 
 ---
 
-# 2. Create Project Folder
+# 2. Internet Requirements (IMPORTANT)
+
+This setup can run fully offline, but **requires internet ONCE** to download images.
+
+## Requires Internet
+
+* Installing Docker
+* Pulling container images
+
+## Does NOT Require Internet
+
+* Running containers
+* WordPress access (local)
+* Backup service
+* Syslog logging
+
+---
+
+# 3. Prepare Images for Offline Use
+
+Run these steps on a machine **with internet access**.
+
+## Pull images
+
+```bash
+docker pull wordpress:6.4
+docker pull rsyslog/syslog_appliance_alpine
+docker pull alpine:3.19
+```
+
+## Save images to files
+
+```bash
+docker save wordpress:6.4 -o wordpress.tar
+docker save rsyslog/syslog_appliance_alpine -o syslog.tar
+docker save alpine:3.19 -o alpine.tar
+```
+
+## Transfer files
+
+Copy `.tar` files to your intranet machine (USB, SCP, etc.)
+
+---
+
+# 4. Load Images on Offline Host
+
+```bash
+docker load -i wordpress.tar
+docker load -i syslog.tar
+docker load -i alpine.tar
+```
+
+---
+
+# 5. Create Project Folder
 
 ```bash
 mkdir gavle-internal-stack
@@ -65,9 +119,7 @@ gavle-internal-stack
 
 ---
 
-# 3. Create the Backup Service
-
-Create backup script:
+# 6. Create the Backup Service
 
 ```bash
 nano backup/backup.sh
@@ -91,7 +143,7 @@ while true; do
 done
 ```
 
-Make it executable:
+Make executable:
 
 ```bash
 chmod +x backup/backup.sh
@@ -99,7 +151,7 @@ chmod +x backup/backup.sh
 
 ---
 
-# 4. Create Syslog Configuration
+# 7. Create Syslog Configuration
 
 ```bash
 nano syslog/rsyslog.conf
@@ -119,7 +171,7 @@ input(type="imtcp" port="514")
 
 ---
 
-# 5. Create docker-compose.yml
+# 8. Create docker-compose.yml
 
 ```bash
 nano docker-compose.yml
@@ -142,7 +194,7 @@ services:
       - ./syslog/rsyslog.conf:/etc/rsyslog.conf
 
   wordpress:
-    image: wordpress:latest
+    image: wordpress:6.4
     container_name: wordpress
     ports:
       - "8080:80"
@@ -155,7 +207,7 @@ services:
         tag: "wordpress"
 
   backup:
-    image: alpine:latest
+    image: alpine:3.19
     container_name: backup
     volumes:
       - wordpress_data:/var/www/html:ro
@@ -173,15 +225,15 @@ volumes:
 
 ---
 
-# 6. Start the Stack
+# 9. Start the Stack (Offline Safe)
 
 ```bash
-docker compose up -d
+docker compose up -d --pull never
 ```
 
 ---
 
-# 7. Verify Containers
+# 10. Verify Containers
 
 ```bash
 docker ps
@@ -197,7 +249,7 @@ backup
 
 ---
 
-# 8. Access WordPress
+# 11. Access WordPress
 
 Open in browser:
 
@@ -205,26 +257,15 @@ Open in browser:
 http://localhost:8080
 ```
 
-Complete the installation wizard.
-
 ---
 
-# 9. Verify Backups
-
-Check backup files:
+# 12. Verify Backups
 
 ```bash
 ls backup/
 ```
 
-Or inside container:
-
-```bash
-docker exec -it backup sh
-ls /backup
-```
-
-Example output:
+Example:
 
 ```
 wordpress-backup-20260320120000.tar.gz
@@ -232,24 +273,16 @@ wordpress-backup-20260320120000.tar.gz
 
 ---
 
-# 10. View Syslog Logs
+# 13. View Logs
 
 ```bash
 docker exec -it syslog sh
 tail -f /var/log/remote.log
 ```
 
-Example:
-
-```
-wordpress: GET /index.php
-backup: Running backup at ...
-backup: Backup completed
-```
-
 ---
 
-# 11. Stop the Environment
+# 14. Stop
 
 ```bash
 docker compose down
@@ -257,15 +290,7 @@ docker compose down
 
 ---
 
-# 12. Restart Later
-
-```bash
-docker compose up -d
-```
-
----
-
-# 🛠️ 13. Useful Debug Commands
+# 15. Debug Commands
 
 ```bash
 docker logs wordpress
@@ -273,22 +298,34 @@ docker logs backup
 docker logs syslog
 
 docker ps -a
-
-docker compose up --build
 ```
 
 ---
 
-# 14. Possible Improvements
+# Offline Best Practices
 
-You can extend this setup with:
+* Always pin image versions (avoid `latest`)
+* Use `--pull never`
+* Store `.tar` images securely
+* Consider a **local Docker registry** for large environments
 
-* MariaDB container (WordPress database persistence)
-* Automated database backups (mysqldump)
-* Restic for encrypted, deduplicated backups
-* Reverse proxy (NGINX) with HTTPS
-* Grafana + Loki for advanced logging
-* Cloud backup (S3 / Backblaze)
+---
+
+# Possible Improvements
+
+* Add MariaDB container (required for real WordPress usage)
+* Add database backups (`mysqldump`)
+* Use Restic for encrypted backups
+* Add NGINX reverse proxy + HTTPS
+* Central logging (ELK / Loki / Grafana)
+
+---
+
+# Important Notes
+
+* This setup backs up **WordPress files only**
+* Database is NOT included (yet)
+* Fully offline operation works after images are loaded
 
 ---
 
@@ -299,14 +336,6 @@ This lab provides:
 * WordPress container
 * Automated backup service
 * Centralized syslog logging
-* Simple and extensible Docker setup
-
----
-
-## Notes
-
-* Backups run every 5 minutes
-* Data is stored locally in the `backup/` directory
-* Only WordPress files are backed up (not database)
+* Fully intranet-compatible deployment
 
 ---
