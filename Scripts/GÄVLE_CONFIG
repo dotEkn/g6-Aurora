@@ -321,6 +321,13 @@ ip dhcp pool VLAN35_KONTOR_AP
  default-router 10.10.35.1
  dns-server 8.8.8.8
 
+! Create Guest ACL
+ip access-list extended GUEST-INTERNET-ONLY
+ deny ip 10.10.25.0 0.0.0.255 10.0.0.0 0.255.255.255
+ deny ip 10.10.25.0 0.0.0.255 172.16.0.0 0.15.255.255
+ permit ip 10.10.25.0 0.0.0.255 any
+exit
+
 ! TRUNK till SW1 (VLAN 10, 99)
 interface GigabitEthernet0/0/0
  description TRUNK_TO_SW1
@@ -434,12 +441,12 @@ router ospf 10
  no passive-interface GigabitEthernet0/0/1.40
  network 10.10.10.0 0.0.0.255 area 0
  network 10.10.15.0 0.0.0.255 area 0
+ network 10.10.25.0 0.0.0.255 area 0
+ network 10.10.35.0 0.0.0.255 area 0
  network 10.10.40.0 0.0.0.255 area 0
  network 10.10.99.0 0.0.0.255 area 0
  network 172.16.20.0 0.0.0.255 area 0
- network 172.16.25.0 0.0.0.255 area 0
  network 172.16.30.0 0.0.0.255 area 0
- network 172.16.35.0 0.0.0.255 area 0
 end
 
 ## R3
@@ -500,6 +507,12 @@ ip dhcp pool VLAN35_KONTOR_AP
  default-router 10.10.35.1
  dns-server 8.8.8.8
 
+! Create Guest ACL
+ip access-list extended GUEST-INTERNET-ONLY
+ deny ip 10.10.25.0 0.0.0.255 10.0.0.0 0.255.255.255
+ deny ip 10.10.25.0 0.0.0.255 172.16.0.0 0.15.255.255
+ permit ip 10.10.25.0 0.0.0.255 any
+exit
 
 ! TRUNK till SW1 (VLAN 10, 99)
 interface GigabitEthernet0/0/0
@@ -614,12 +627,12 @@ router ospf 10
  no passive-interface GigabitEthernet0/0/1.40
  network 10.10.10.0 0.0.0.255 area 0
  network 10.10.15.0 0.0.0.255 area 0
+ network 10.10.25.0 0.0.0.255 area 0
+ network 10.10.35.0 0.0.0.255 area 0
  network 10.10.40.0 0.0.0.255 area 0
  network 10.10.99.0 0.0.0.255 area 0
  network 172.16.20.0 0.0.0.255 area 0
- network 172.16.25.0 0.0.0.255 area 0
  network 172.16.30.0 0.0.0.255 area 0
- network 172.16.35.0 0.0.0.255 area 0
 end
 
 # SWITCHAR
