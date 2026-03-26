@@ -5,7 +5,7 @@
 conf t
 hostname R1-HK
 no ip domain lookup
-ip domain name aurora.local
+ip domain name aurora-local
 ipv6 unicast-routing
 
 ! SSH konfigurering
@@ -210,6 +210,7 @@ ip route 0.0.0.0 0.0.0.0 203.0.113.1
 ip route 172.16.0.0 255.255.0.0 203.0.113.1
 ip route 10.10.100.0 255.255.255.0 203.0.113.1
 ip route 10.10.140.0 255.255.255.0 203.0.113.1
+ipv6 route ::/0 2001:DB8:ABCD:1::1
 
 
 ! NATIVE (VLAN 99 via SW1)
@@ -269,7 +270,7 @@ end
 conf t
 hostname R2-HK
 no ip domain lookup
-ip domain name aurora.local
+ip domain name aurora-local
 ipv6 unicast-routing
 
 ! SSH konfigurering
@@ -282,8 +283,8 @@ ipv6 unicast-routing
  exec-timeout 10 0
  exit
 
-! aaa new-model
- Lokala användare
+ aaa new-model
+! Lokala användare
  username NAdmin privilege 15 secret 111
  username SAdmin privilege 7 secret 222
  aaa authentication login default local
@@ -448,7 +449,7 @@ end
 conf t
 hostname R3-HK
 no ip domain lookup
-ip domain name aurora.local
+ip domain name aurora-local
 ipv6 unicast-routing
 
 ! SSH konfigurering
@@ -673,6 +674,7 @@ interface Vlan10
  ipv6 address FE80::11 link-local
  no shut
  ip default-gateway 10.10.10.1
+ ipv6 route ::/0 2001:DB8:ABCD:10::1
 
 ! R1
 interface Gi1/0/15
@@ -760,6 +762,7 @@ interface Vlan15
  ipv6 address FE80::12 link-local
  no shut
  ip default-gateway 10.10.15.1
+ ipv6 route ::/0 2001:DB8:ABCD:15::2
 
 ! Trunk till R2
 interface Gi1/0/15
@@ -843,6 +846,7 @@ interface Vlan15
  ipv6 address FE80::13 link-local
  no shut
  ip default-gateway 10.10.15.1
+ ipv6 route ::/0 2001:DB8:ABCD:15::2
 
 ! Trunk till R3
 interface Gi1/0/15
@@ -934,6 +938,7 @@ interface Vlan15
  ipv6 address FE80::14 link-local
  no shut
  ip default-gateway 10.10.15.1
+ ipv6 route ::/0 2001:DB8:ABCD:15::2
 
 ! Trunk till SW2
 interface range Gi1/0/21-22
