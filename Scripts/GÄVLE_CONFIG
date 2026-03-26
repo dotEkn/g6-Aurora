@@ -715,7 +715,7 @@ interface range g1/0/2-14,g1/0/18-24
  switchport mode access
  switchport access vlan 999
  shutdown
-exit
+end
 
 ## SW2
 conf t
