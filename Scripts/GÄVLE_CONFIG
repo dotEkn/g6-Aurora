@@ -675,6 +675,7 @@ interface Vlan10
  ipv6 address 2001:DB8:ABCD:10::11/64
  ipv6 address FE80::11 link-local
  no shut
+exit
  ip default-gateway 10.10.10.1
  ipv6 route ::/0 2001:DB8:ABCD:10::1
 
@@ -763,6 +764,7 @@ interface Vlan15
  ipv6 address 2001:DB8:ABCD:15::12/64
  ipv6 address FE80::12 link-local
  no shut
+ exit
  ip default-gateway 10.10.15.1
  ipv6 route ::/0 Vlan15 FE80::1
 
@@ -847,6 +849,7 @@ interface Vlan15
  ipv6 address 2001:DB8:ABCD:15::13/64
  ipv6 address FE80::13 link-local
  no shut
+ exit
  ip default-gateway 10.10.15.1
  ipv6 route ::/0 Vlan15 FE80::1
 
@@ -939,6 +942,7 @@ interface Vlan15
  ipv6 address 2001:DB8:ABCD:15::14/64
  ipv6 address FE80::14 link-local
  no shut
+ exit
  ip default-gateway 10.10.15.1
  ipv6 route ::/0 Vlan15 FE80::1
 
