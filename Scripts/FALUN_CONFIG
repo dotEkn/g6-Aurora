@@ -864,6 +864,7 @@ interface Vlan199
  no shut
 exit
 ip default-gateway 10.10.199.1
+ipv6 route ::/0 Vlan199 FE80::1
 
 ! STP root primary
 spanning-tree vlan 110,115,120,125,135,140,150,155,199 root primary
@@ -1002,6 +1003,7 @@ interface Vlan199
  no shut
 exit
 ip default-gateway 10.10.199.1
+ipv6 route ::/0 Vlan199 FE80::1
 
 spanning-tree vlan 110,115,120,125,135,140,150,155,199 root secondary
 
@@ -1138,6 +1140,7 @@ interface Vlan199
  no shut
 exit
 ip default-gateway 10.10.199.1
+ipv6 route ::/0 Vlan199 FE80::1
 
 ! AP4 Sensor VLAN150
 interface Gi1/0/15
@@ -1249,6 +1252,7 @@ interface Vlan199
  no shut
 exit
 ip default-gateway 10.10.199.1
+ipv6 route ::/0 Vlan199 FE80::1
 
 ! Analys PC VLAN120
 interface range Gi1/0/1-14
