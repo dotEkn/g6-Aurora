@@ -29,6 +29,7 @@ crypto isakmp policy 1
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 
 crypto isakmp key AURORAKEY address 203.0.113.2
@@ -220,6 +221,7 @@ aaa new-model
  username m.danielsson2000 privilege 7 secret 222
 aaa authentication login default local
 aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 ! ACL för att isolera IoT-sensorerna
 ip access-list extended IOT-RESTRICT
@@ -523,6 +525,7 @@ ipv6 unicast-routing
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 ! ACL för att isolera IoT-sensorerna
 ip access-list extended IOT-RESTRICT
@@ -827,6 +830,7 @@ spanning-tree mode rapid-pvst
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 vlan 105
  name Management
@@ -966,6 +970,7 @@ spanning-tree mode rapid-pvst
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 vlan 105
  name Management
@@ -1109,6 +1114,7 @@ spanning-tree mode rapid-pvst
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 vlan 105
  name Management
@@ -1223,6 +1229,7 @@ spanning-tree mode rapid-pvst
  username SAdmin privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 vlan 110 
  name PERSONAL 
