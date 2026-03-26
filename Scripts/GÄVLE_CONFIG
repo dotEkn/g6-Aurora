@@ -359,6 +359,7 @@ interface GigabitEthernet0/0/1.15
  ipv6 address FE80::2D link-local
  standby version 2
  standby 15 ip 10.10.15.1
+ standby 15 ipv6 FE80::1
  standby 15 priority 110
  standby 15 preempt
  no shut
@@ -538,6 +539,7 @@ interface GigabitEthernet0/0/1.15
  ipv6 address FE80::3D link-local
  standby version 2
  standby 15 ip 10.10.15.1
+ standby 15 ipv6 FE80::1
  standby 15 priority 100
  standby 15 preempt
  no shut
@@ -762,7 +764,7 @@ interface Vlan15
  ipv6 address FE80::12 link-local
  no shut
  ip default-gateway 10.10.15.1
- ipv6 route ::/0 2001:DB8:ABCD:15::2
+ ipv6 route ::/0 Vlan15 FE80::1
 
 ! Trunk till R2
 interface Gi1/0/15
@@ -846,7 +848,7 @@ interface Vlan15
  ipv6 address FE80::13 link-local
  no shut
  ip default-gateway 10.10.15.1
- ipv6 route ::/0 2001:DB8:ABCD:15::2
+ ipv6 route ::/0 Vlan15 FE80::1
 
 ! Trunk till R3
 interface Gi1/0/15
@@ -938,7 +940,7 @@ interface Vlan15
  ipv6 address FE80::14 link-local
  no shut
  ip default-gateway 10.10.15.1
- ipv6 route ::/0 2001:DB8:ABCD:15::2
+ ipv6 route ::/0 Vlan15 FE80::1
 
 ! Trunk till SW2
 interface range Gi1/0/21-22
