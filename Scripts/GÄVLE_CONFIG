@@ -24,6 +24,7 @@ ipv6 unicast-routing
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 ! ZPF
 zone security INSIDE
@@ -289,6 +290,7 @@ ipv6 unicast-routing
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 ! Exkludera DHCP adresser
 ip dhcp excluded-address 172.16.20.1 172.16.20.50
@@ -469,6 +471,7 @@ ipv6 unicast-routing
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 ! Exkludera DHCP adresser
 ip dhcp excluded-address 172.16.20.1 172.16.20.50
@@ -652,6 +655,7 @@ spanning-tree mode rapid-pvst
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 vlan 5
  name DMZ
@@ -740,6 +744,7 @@ spanning-tree mode rapid-pvst
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 vlan 15
  name MANAGEMENT_INTERNAL
@@ -837,6 +842,7 @@ spanning-tree mode rapid-pvst
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 vlan 15
  name MANAGEMENT_INTERNAL
@@ -942,6 +948,7 @@ spanning-tree mode rapid-pvst
  username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
+ login block-for 10 attempts 3 within 30
 
 vlan 15
  name MANAGEMENT_INTERNAL
