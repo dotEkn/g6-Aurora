@@ -9,21 +9,21 @@ ip domain name aurora.local
 ipv6 unicast-routing
 
 ! SSH konfigurering
-! ip domain name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 ! ZPF
 zone security INSIDE
@@ -273,21 +273,21 @@ ip domain name aurora.local
 ipv6 unicast-routing
 
 ! SSH konfigurering
-! ip domain name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
 ! aaa new-model
-! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ Lokala användare
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 ! Exkludera DHCP adresser
 ip dhcp excluded-address 172.16.20.1 172.16.20.50
@@ -452,21 +452,21 @@ ip domain name aurora.local
 ipv6 unicast-routing
 
 ! SSH konfigurering
-! ip domain name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 ! Exkludera DHCP adresser
 ip dhcp excluded-address 172.16.20.1 172.16.20.50
@@ -633,21 +633,21 @@ vtp mode transparent
 spanning-tree mode rapid-pvst
 
 ! SSH konfigurering
-! ip domain-name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain-name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 vlan 5
  name DMZ
@@ -720,21 +720,21 @@ vtp mode transparent
 spanning-tree mode rapid-pvst
 
 ! SSH konfigurering
-! ip domain-name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain-name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 vlan 15
  name MANAGEMENT_INTERNAL
@@ -894,21 +894,21 @@ vtp mode transparent
 spanning-tree mode rapid-pvst
 
 ! SSH konfigurering
-! ip domain-name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain-name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 vlan 15
  name MANAGEMENT_INTERNAL
