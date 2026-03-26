@@ -14,21 +14,21 @@ crypto isakmp policy 1
  exit
 
 ! SSH konfigurering
-! ip domain name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 
 crypto isakmp key AURORAKEY address 203.0.113.2
@@ -492,21 +492,21 @@ ip domain name aurora.local
 ipv6 unicast-routing
 
 ! SSH konfigurering
-! ip domain name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 ! ACL för att isolera IoT-sensorerna
 ip access-list extended IOT-RESTRICT
@@ -789,21 +789,21 @@ vtp mode transparent
 spanning-tree mode rapid-pvst
 
 ! SSH konfigurering
-! ip domain-name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain-name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 vlan 105
  name Management
@@ -927,21 +927,21 @@ vtp mode transparent
 spanning-tree mode rapid-pvst
 
 ! SSH konfigurering
-! ip domain-name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain-name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
-! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ aaa new-model
+ Lokala användare
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 vlan 105
  name Management
@@ -1069,21 +1069,21 @@ vtp mode transparent
 spanning-tree mode rapid-pvst
 
 ! SSH konfigurering
-! ip domain-name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain-name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 vlan 105
  name Management
@@ -1182,21 +1182,21 @@ vtp mode transparent
 spanning-tree mode rapid-pvst
 
 ! SSH konfigurering
-! ip domain-name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain-name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username NAdmin privilege 15 secret 111
+ username SAdmin privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 vlan 110 
  name PERSONAL 
