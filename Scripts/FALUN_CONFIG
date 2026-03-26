@@ -1,8 +1,8 @@
 ## R1 EDGE
 conf t
-hostname R1
+hostname R1-FE
 no ip domain lookup
-ip domain name aurora.local
+ip domain name aurora-local
 ipv6 unicast-routing
 
 ! IPSEC VPN (KRYPTERING & REGLER)
@@ -199,9 +199,9 @@ exit
 ## R2 CORE
 
 conf t
-hostname R2
+hostname R2-FE
 no ip domain lookup
-ip domain name aurora.local
+ip domain name aurora-local
 ipv6 unicast-routing
 
 ! SSH konfigurering
@@ -502,9 +502,9 @@ end
 ## R3 CORE
 
 conf t
-hostname R3
+hostname R3-FE
 no ip domain lookup
-ip domain name aurora.local
+ip domain name aurora-local
 ipv6 unicast-routing
 
 ! SSH konfigurering
@@ -806,7 +806,7 @@ end
 ## SW1
 
 conf t
-hostname SW1
+hostname SW1-FE
 no ip domain-lookup
 vtp mode transparent
 spanning-tree mode rapid-pvst
@@ -945,7 +945,7 @@ end
 ## SW2
 
 conf t
-hostname SW2
+hostname SW2-FE
 no ip domain-lookup
 vtp mode transparent
 spanning-tree mode rapid-pvst
@@ -1088,7 +1088,7 @@ end
 
 ## SW3
 conf t
-hostname SW3
+hostname SW3-FE
 no ip domain-lookup
 vtp mode transparent
 spanning-tree mode rapid-pvst
@@ -1202,7 +1202,7 @@ end
 ## SW4
 
 conf t
-hostname SW4
+hostname SW4-FE
 no ip domain-lookup
 vtp mode transparent
 spanning-tree mode rapid-pvst
