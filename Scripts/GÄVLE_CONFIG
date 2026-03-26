@@ -20,8 +20,8 @@ ipv6 unicast-routing
 
  aaa new-model
 ! Lokala användare
- username NAdmin privilege 15 secret 111
- username SAdmin privilege 7 secret 222
+ username o.nilsson2002 privilege 15 secret 111
+ username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
 
@@ -285,8 +285,8 @@ ipv6 unicast-routing
 
  aaa new-model
 ! Lokala användare
- username NAdmin privilege 15 secret 111
- username SAdmin privilege 7 secret 222
+ username o.nilsson2002 privilege 15 secret 111
+ username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
 
@@ -465,8 +465,8 @@ ipv6 unicast-routing
 
  aaa new-model
 ! Lokala användare
- username NAdmin privilege 15 secret 111
- username SAdmin privilege 7 secret 222
+ username o.nilsson2002 privilege 15 secret 111
+ username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
 
@@ -647,8 +647,8 @@ spanning-tree mode rapid-pvst
 
  aaa new-model
 ! Lokala användare
- username NAdmin privilege 15 secret 111
- username SAdmin privilege 7 secret 222
+ username o.nilsson2002 privilege 15 secret 111
+ username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
 
@@ -735,8 +735,8 @@ spanning-tree mode rapid-pvst
 
  aaa new-model
 ! Lokala användare
- username NAdmin privilege 15 secret 111
- username SAdmin privilege 7 secret 222
+ username o.nilsson2002 privilege 15 secret 111
+ username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
 
@@ -808,21 +808,21 @@ vtp mode transparent
 spanning-tree mode rapid-pvst
 
 ! SSH konfigurering
-! ip domain-name aurora-local
-! crypto key generate rsa modulus 2048
-! ip ssh version 2
-! line vty 0 4
-! transport input ssh
-! login local
-! exec-timeout 10 0
-! exit
+ ip domain-name aurora-local
+ crypto key generate rsa modulus 2048
+ ip ssh version 2
+ line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+ exit
 
-! aaa new-model
+ aaa new-model
 ! Lokala användare
-! username NAdmin privilege 15 secret 111
-! username SAdmin privilege 7 secret 222
-! aaa authentication login default local
-! aaa authorization exec default local
+ username o.nilsson2002 privilege 15 secret 111
+ username m.danielsson2000 privilege 7 secret 222
+ aaa authentication login default local
+ aaa authorization exec default local
 
 vlan 15
  name MANAGEMENT_INTERNAL
@@ -911,8 +911,8 @@ spanning-tree mode rapid-pvst
 
  aaa new-model
 ! Lokala användare
- username NAdmin privilege 15 secret 111
- username SAdmin privilege 7 secret 222
+ username o.nilsson2002 privilege 15 secret 111
+ username m.danielsson2000 privilege 7 secret 222
  aaa authentication login default local
  aaa authorization exec default local
 
