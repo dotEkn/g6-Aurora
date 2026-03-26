@@ -177,6 +177,15 @@ router ospf 10
  network 10.10.100.4 0.0.0.3 area 0
  default-information originate always
 
+conf t
+router ospf 10
+ area 0 authentication message-digest
+interface g0/1
+ ip ospf message-digest-key 1 md5 AURORA123
+interface g0/2
+ ip ospf message-digest-key 1 md5 AURORA123
+exit
+
 ipv6 router ospf 10
  router-id 1.1.1.1
  default-information originate
@@ -434,6 +443,13 @@ ipv6 router ospf 10
  router-id 2.2.2.2
  default-information originate always
  exit
+
+conf t
+router ospf 10
+ area 0 authentication message-digest
+interface GigabitEthernet0/0/0
+ ip ospf message-digest-key 1 md5 AURORA123
+exit
 
 ipv6 route ::/0 2001:db8:abcd:101::1
 
@@ -731,6 +747,13 @@ router ospf 10
  network 10.10.140.0 0.0.0.255 area 0
  network 10.10.150.0 0.0.0.255 area 0
  network 10.10.155.0 0.0.0.255 area 0
+
+conf t
+router ospf 10
+ area 0 authentication message-digest
+interface GigabitEthernet0/0/0
+ ip ospf message-digest-key 1 md5 AURORA123
+exit
 
 ipv6 route ::/0 2001:db8:abcd:103::1
 
