@@ -65,7 +65,7 @@ crypto map AURORAMAP 5 ipsec-isakmp
  match address AURORAVPN
  exit
 
-! BRANDVÄGG & NAT-LISTOR
+! BRANDVÄGG & NAT-LISTOR IN
 ip access-list extended FE-NAT-EXT
  ! --- NAT-UNDANTAG FÖR VPN (Deny = Gör INGEN NAT) ---
  deny ip 10.10.0.0 0.0.255.255 10.10.0.0 0.0.255.255
@@ -82,7 +82,7 @@ ip access-list extended FE-NAT-EXT
  permit ip 10.10.100.0 0.0.0.255 any
  exit
 
-! 2. Brandväggen mot Internet
+! Brandväggen mot Internet UT
 ip access-list extended HK-EDGE-IN
  ! Tillåt VPN-tunneln från Falun
  permit udp host 203.0.113.2 host 203.0.113.10 eq isakmp
