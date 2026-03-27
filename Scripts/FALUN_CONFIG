@@ -751,7 +751,6 @@ router ospf 10
  network 10.10.150.0 0.0.0.255 area 0
  network 10.10.155.0 0.0.0.255 area 0
 
-conf t
 router ospf 10
  area 0 authentication message-digest
 interface GigabitEthernet0/0/0
